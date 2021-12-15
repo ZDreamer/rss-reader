@@ -56,18 +56,18 @@ services:
     networks:
       - rss-reader
 
-  npm:
-    image: node:14-alpine
-    restart: unless-stopped
-    ports:
-      - "3000:3000"
-      - "3001:3001"
-    volumes:
-      - ./:/var/www
-    working_dir: /var/www
+#  npm:
+#    image: node:14-alpine
+#    ports:
+#      - "3000:3000"
+#      - "3001:3001"
+#    volumes:
+#      - ./:/var/www
+#    working_dir: /var/www
 #    entrypoint: ['npm']
-    networks:
-      - rss-reader
+#    command: "npm start"
+#    networks:
+#      - rss-reader
 
   jetbrains:
     build:
@@ -77,6 +77,8 @@ services:
       context: ./
       dockerfile: docker-compose/jetbrains/Dockerfile
     ports:
+      - "3000:3000"
+      - "3001:3001"
       - "3022:22"
     restart: unless-stopped
     working_dir: /var/www/
