@@ -10,6 +10,7 @@ type PostFilterProps = {
 const PostFilter = ({filter, setFilter}:PostFilterProps) => {
     return (
         <form>
+            <input/>
             <MyInput
                 value={filter.titleFilter}
                 onChange={e => setFilter({...filter, titleFilter: e.target.value})}

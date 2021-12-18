@@ -6,6 +6,7 @@
 
 #root {
     display: flex;
+    flex-direction: column;
     justify-content: space-between;
 }
 
@@ -22,6 +23,15 @@
     align-items: center;
 }
 
+.post__buttons {
+    display: flex;
+    flex-direction: column;
+}
+
+.post__buttons button {
+    margin-bottom: 2px;
+}
+
 .post-enter {
     transform: translateX(-350px);
 }
@@ -36,3 +46,24 @@
     transform: translateX(-350px);
     transition: all 500ms ease-in;
 }
+
+.navigation {
+    height: 50px;
+    width: 100vw;
+    display: flex;
+    align-items: center;
+    padding: 0 15px;
+}
+
+.navigation__links {
+
+}
+
+.navigation__links a {
+    margin-right: 5px;
+}
+
+.navigation__links a.active {
+    font-weight: bold;
+}
+

@@ -1,7 +1,11 @@
-import React, {PropsWithChildren} from 'react';
+import React, {ButtonHTMLAttributes, InputHTMLAttributes, PropsWithChildren} from 'react';
 import classes from './MyButton.module.css';
 
-const MyButton = ({children, ...props}: PropsWithChildren<any>) => {
+export interface MyButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+    children?: React.ReactNode;
+}
+
+const MyButton = ({children, ...props}: MyButtonProps) : JSX.Element => {
     return (
         <button {...props} className={classes.myBtn + ' ' + (props.className || '')}>
             {children}

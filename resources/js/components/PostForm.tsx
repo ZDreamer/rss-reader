@@ -3,15 +3,13 @@ import MyInput from "./UI/input/MyInput";
 import MyButton from "./UI/button/MyButton";
 
 export type PostFormProps = {
-    onAddNewPost(post: PostData): void
+    onAddNewPost(post: Post): void
 }
 
 const PostForm = ({onAddNewPost}: PostFormProps) => {
     const [post, setPost] = useState({title: '', body: ''});
 
-    const addNewPost = function (e) {
-        e.preventDefault();
-
+    const addNewPost = function () {
         onAddNewPost({...post, id: Date.now()});
 
         setPost({title: '', body: ''})
@@ -29,7 +27,12 @@ const PostForm = ({onAddNewPost}: PostFormProps) => {
                 onChange={e => setPost({...post, body: e.target.value})}
                 type="text" placeholder="Описание поста"
             />
-            <MyButton onClick={addNewPost}>Создать пост</MyButton>
+            <MyButton
+                onClick={e => {
+                    e.preventDefault();
+                    addNewPost();
+                }}
+            >Создать пост</MyButton>
         </form>
     );
 };

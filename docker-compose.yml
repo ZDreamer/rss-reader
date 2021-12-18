@@ -56,19 +56,6 @@ services:
     networks:
       - rss-reader
 
-#  npm:
-#    image: node:14-alpine
-#    ports:
-#      - "3000:3000"
-#      - "3001:3001"
-#    volumes:
-#      - ./:/var/www
-#    working_dir: /var/www
-#    entrypoint: ['npm']
-#    command: "npm start"
-#    networks:
-#      - rss-reader
-
   jetbrains:
     build:
       args:
@@ -80,6 +67,9 @@ services:
       - "3000:3000"
       - "3001:3001"
       - "3022:22"
+      - "5990:5990"
+    environment:
+      - TZ=Europe/Moscow
     restart: unless-stopped
     working_dir: /var/www/
     volumes:

@@ -18,3 +18,13 @@ RUN service ssh start
 EXPOSE 22
 
 CMD ["/usr/sbin/sshd","-D"]
+
+#CMD sh /home/jetbrains/.cache/JetBrains/RemoteDev/dist/cc1b278e0185f_PhpStorm-2021.3/bin/remote-dev-server.sh \
+#	run /var/www \
+#	--ssh-link-host 127.0.0.1 \
+#	--ssh-link-user jetbrains \
+#	--ssh-link-port 22 \
+#	--listenOn 0.0.0.0
+
+#https://youtrack.jetbrains.com/issue/GTW-780 - Docker image issue
+#https://youtrack.jetbrains.com/issue/CWM-3983 - Without ssh connection

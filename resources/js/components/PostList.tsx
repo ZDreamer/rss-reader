@@ -12,15 +12,6 @@ export type PostListProps = {
 }
 
 const PostList = ({posts, title, onRemovePost, arePostsLoading, postLoadError}: PostListProps) => {
-    if (arePostsLoading) {
-        return (
-            <div style={{display: 'flex', justifyContent: 'center', marginTop: '50px'}}>
-                <Loader/>
-            </div>
-
-        );
-    }
-
     if (postLoadError) {
         return (
             <h1 style={{textAlign: 'center'}}>
@@ -40,21 +31,14 @@ const PostList = ({posts, title, onRemovePost, arePostsLoading, postLoadError}: 
     return (
         <div>
             <h1 style={{textAlign: 'center'}}>{title}</h1>
-                <TransitionGroup>
-                    {posts.map((post) =>
-                        <CSSTransition
-                            key={post.id}
-                            timeout={500}
-                            classNames="post"
-                        >
-                            <PostItem
-                                index={post.id}
-                                post={post}
-                                onRemovePost={onRemovePost}
-                            />
-                        </CSSTransition>
-                    )}
-                </TransitionGroup>
+                {posts.map((post) =>
+                    <PostItem
+                        key={post.id}
+                        index={post.id}
+                        post={post}
+                        onRemovePost={onRemovePost}
+                    />
+                )}
         </div>
     );
 };

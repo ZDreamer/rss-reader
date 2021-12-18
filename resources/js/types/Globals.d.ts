@@ -1,17 +1,27 @@
 declare module "*.module.css";
 declare module "*.module.scss";
 
-type PostData = {
+type Post = {
     userId?: number,
     id: number,
     title: string
     body: string,
 }
 
-type PostDataList = Array<PostData>;
+type PostList = Array<Post>;
+
+type PostComment = {
+    postId: number,
+    id: number,
+    name: string,
+    email: string,
+    body: string
+}
+
+type PostComments = Array<PostComment>
 
 type PostFilterData = {
-    orderBy: string,
+    orderBy: "id" | "title" | "body",
     titleFilter: string
 }
 
@@ -21,4 +31,10 @@ type OnPage = number;
 type PageFilter = {
     page: Page,
     onPage: OnPage,
+}
+
+interface AuthContextType {
+    user: any;
+    signIn: (user: string, callback: VoidFunction) => void;
+    signOut: (callback: VoidFunction) => void;
 }

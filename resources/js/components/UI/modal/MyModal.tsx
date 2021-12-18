@@ -2,15 +2,11 @@ import React, {PropsWithChildren} from 'react';
 import classes from './MyModal.module.css';
 
 type MyModalProps = {
-    visible: Boolean,
-    setVisible(Boolean): void
+    visible: boolean,
+    setVisible(visible: boolean): void
 };
 
 const MyModal = ({children, visible, setVisible}: PropsWithChildren<MyModalProps>) => {
-    const onBackgroundClick = function (e) {
-        setVisible(false)
-    }
-
     const rootClasses = [classes.myModal];
     if (visible) {
         rootClasses.push(classes.active);
@@ -19,7 +15,7 @@ const MyModal = ({children, visible, setVisible}: PropsWithChildren<MyModalProps
     return (
         <div
             className={rootClasses.join(' ')}
-            onClick={onBackgroundClick}
+            onClick={() => {setVisible(false)}}
         >
             <div
                 className={classes.myModalContent}

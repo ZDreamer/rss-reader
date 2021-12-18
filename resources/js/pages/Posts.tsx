@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import '../../css/App.css';
 import PostList from "./../components/PostList";
 import PostForm from "./../components/PostForm";
@@ -9,9 +9,12 @@ import {usePosts} from "../hooks/usePosts";
 import PostService from "../API/PostService";
 import {useFetching} from "../hooks/useFetching";
 import Paginator from "./../components/UI/Paginator/Paginator";
+import Loader from "../components/UI/Loader/Loader";
+import useObserver from "../hooks/useObserver";
 
-export default function Posts() {
-    const [posts, setPosts] = useState<PostDataList>([]);
+
+export default function Posts(): React.ReactElement {
+    const [posts, setPosts] = useState<PostList>([]);
 
     const [filter, setFilter] = useState<PostFilterData>({
         orderBy: 'id',
@@ -26,18 +29,29 @@ export default function Posts() {
 
     const [fetchPosts, arePostsLoading, postLoadError] = useFetching(async () => {
         const response = await PostService.getPage(pageFilter);
-        setPosts(response.data);
+        setPosts([...posts, ...response.data]);
         setTotalCount(response.headers['x-total-count']);
     });
 
-    const onAddNewPost = (post: PostData) => {
+    const listEndAnchor = useRef<HTMLDivElement | null>(null);
+
+    const onAddNewPost = (post: Post) => {
         setPosts([...posts, post]);
         setAddFormVisible(false);
     }
 
-    const onRemovePost = (post: PostData) => {
+    const onRemovePost = (post: Post) => {
         setPosts(posts.filter(p => p.id !== post.id));
     }
+
+    useObserver<HTMLDivElement>(
+        listEndAnchor,
+        arePostsLoading,
+        pageFilter.page * pageFilter.onPage < totalCount,
+        () => {
+            setOnPageFilter({...pageFilter, page: pageFilter.page + 1});
+        }
+    );
 
     useEffect(() => {
         fetchPosts();
@@ -68,8 +82,16 @@ export default function Posts() {
                 arePostsLoading={arePostsLoading}
                 postLoadError={postLoadError}
                 onRemovePost={onRemovePost}
-                title="Посты про JS!!!"
+                title="Посты про JS!"
             />
+
+            { arePostsLoading &&
+                <div style={{display: 'flex', justifyContent: 'center', marginTop: '50px'}}>
+                    <Loader/>
+                </div>
+            }
+
+            <div ref={listEndAnchor} style={{background: 'red'}}>&nbsp;</div>
 
             <Paginator
                 pageFilter={pageFilter}

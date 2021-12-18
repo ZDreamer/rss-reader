@@ -20,15 +20,14 @@ const Paginator = ({pageFilter, setOnPageFilter, totalCount}: PaginatorProps): J
         return pageList;
     }, [pageFilter, totalCount]);
 
-    const onPageSelect = (e): void => {
-        setOnPageFilter({...pageFilter, page: e.target.dataset.page});
-    };
-
     return (
         <div className={classes.paginator}>
             {pageList.map(page =>
                 <MyButton
-                    onClick={onPageSelect}
+                    onClick={e => {
+                        let page = parseInt((e.target as HTMLElement).dataset.page || "1");
+                        setOnPageFilter({...pageFilter, page: page});
+                    }}
                     className={classes.paginatorPage + ((page == pageFilter.page) ? (' ' + classes.active): '')}
                     key={page}
                     data-page={page}

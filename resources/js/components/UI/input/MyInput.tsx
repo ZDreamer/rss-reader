@@ -1,9 +1,17 @@
-import React from 'react';
+import React, {ChangeEvent, InputHTMLAttributes} from 'react';
 import classes from './MyInput.module.css';
 
-const MyInput = (props) => {
+export interface MyInputProps extends InputHTMLAttributes<HTMLInputElement> {
+
+}
+
+const MyInput = ({onChange, className, ...props}: MyInputProps) => {
     return (
-        <input className={classes.myInput} {...props}/>
+        <input
+            className={classes.myInput + ' ' + (className || '')}
+            onChange={e => onChange ? onChange(e) : () => {}}
+            {...props}
+        />
     );
 };
 
