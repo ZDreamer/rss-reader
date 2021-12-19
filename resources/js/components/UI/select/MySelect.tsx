@@ -8,7 +8,7 @@ type MySelectPropsOption = {
 export type MySelectProps = {
     options: Array<MySelectPropsOption>,
     value: string,
-    onChange?(value: any): void
+    onChange?(value: string): void
 }
 
 const MySelect = ({

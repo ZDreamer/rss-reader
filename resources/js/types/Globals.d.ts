@@ -19,9 +19,10 @@ type PostComment = {
 }
 
 type PostComments = Array<PostComment>
+type PostFilterDataOrderBy = "id" | "title" | "body";
 
 type PostFilterData = {
-    orderBy: "id" | "title" | "body",
+    orderBy: PostFilterDataOrderBy,
     titleFilter: string
 }
 

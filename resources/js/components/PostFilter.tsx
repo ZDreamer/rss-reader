@@ -18,7 +18,7 @@ const PostFilter = ({filter, setFilter}:PostFilterProps) => {
 
             <MySelect
                 value={filter.orderBy}
-                onChange={value => setFilter({...filter, orderBy: value})}
+                onChange={(value:PostFilterDataOrderBy) => setFilter({...filter, orderBy: value})}
                 options={[
                     {value: 'id', title: 'По номеру'},
                     {value: 'title', title: 'По названию'},

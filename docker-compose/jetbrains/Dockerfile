@@ -1,4 +1,4 @@
-FROM ubuntu:21.04
+FROM ubuntu:22.04
 
 #Install SSH
 RUN apt update && apt install  openssh-server sudo -y

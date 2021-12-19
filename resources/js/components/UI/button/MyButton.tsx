@@ -1,4 +1,4 @@
-import React, {ButtonHTMLAttributes, InputHTMLAttributes, PropsWithChildren} from 'react';
+import React, {ButtonHTMLAttributes} from 'react';
 import classes from './MyButton.module.css';
 
 export interface MyButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
