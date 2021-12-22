@@ -13,6 +13,8 @@ RUN apt-get update && \
 #Install NPM
 RUN apt-get update && apt-get install -y npm nodejs
 
+COPY  ./docker-compose/jetbrains/ssh/authorized_keys /home/jetbrains/.ssh/authorized_keys
+
 RUN service ssh start
 
 EXPOSE 22

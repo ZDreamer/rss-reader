@@ -4039,11 +4039,10 @@ function Posts() {
       pageFilter = _e[0],
       setOnPageFilter = _e[1];
 
-  var _f = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
-      needToClearPosts = _f[0],
-      setNeedToClearPosts = _f[1];
+  var listEndAnchor = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
+  var lastUsedPageFilter = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(pageFilter);
 
-  var _g = (0,_hooks_useFetching__WEBPACK_IMPORTED_MODULE_9__.useFetching)(function () {
+  var _f = (0,_hooks_useFetching__WEBPACK_IMPORTED_MODULE_9__.useFetching)(function () {
     return __awaiter(_this, void 0, void 0, function () {
       var response;
       return __generator(this, function (_a) {
@@ -4056,13 +4055,13 @@ function Posts() {
           case 1:
             response = _a.sent();
 
-            if (needToClearPosts) {
-              setPosts(response.data);
-              setNeedToClearPosts(false);
-            } else {
+            if (pageFilter.onPage == lastUsedPageFilter.current.onPage) {
               setPosts(__spreadArray(__spreadArray([], posts, true), response.data, true));
+            } else {
+              setPosts(response.data);
             }
 
+            lastUsedPageFilter.current = pageFilter;
             setTotalCount(response.headers['x-total-count']);
             return [2
             /*return*/
@@ -4071,11 +4070,13 @@ function Posts() {
       });
     });
   }),
-      fetchPosts = _g[0],
-      arePostsLoading = _g[1],
-      postLoadError = _g[2];
+      fetchPosts = _f[0],
+      arePostsLoading = _f[1],
+      postLoadError = _f[2];
 
-  var listEndAnchor = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    fetchPosts();
+  }, [pageFilter.page, pageFilter.onPage]);
 
   var onAddNewPost = function onAddNewPost(post) {
     setPosts(__spreadArray(__spreadArray([], posts, true), [post], false));
@@ -4093,7 +4094,6 @@ function Posts() {
       page: 1,
       onPage: parseInt(value)
     });
-    setNeedToClearPosts(true);
   };
 
   (0,_hooks_useObserver__WEBPACK_IMPORTED_MODULE_12__["default"])(listEndAnchor, arePostsLoading, pageFilter.page * pageFilter.onPage < totalCount && pageFilter.onPage != -1, function () {
@@ -4101,9 +4101,6 @@ function Posts() {
       page: pageFilter.page + 1
     }));
   });
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
-    fetchPosts();
-  }, [pageFilter]);
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
     className: "App"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_components_UI_button_MyButton__WEBPACK_IMPORTED_MODULE_6__["default"], {
@@ -4146,7 +4143,7 @@ function Posts() {
     arePostsLoading: arePostsLoading,
     postLoadError: postLoadError,
     onRemovePost: onRemovePost,
-    title: "\u041F\u043E\u0441\u0442\u044B \u043F\u0440\u043E JS!"
+    title: "\u041F\u043E\u0441\u0442\u044B \u043F\u0440\u043E JS!!!"
   }), arePostsLoading && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
     style: {
       display: 'flex',
