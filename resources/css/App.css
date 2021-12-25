@@ -4,14 +4,20 @@
     box-sizing: border-box;
 }
 
-#root {
+.layout {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
 }
 
-.App {
-    width: 800px;
+.layout__main {
+    display: flex;
+    justify-content: space-between;
+}
+
+.layout__top {
+    display: flex;
+    flex-direction: row;
 }
 
 .post {

@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import MyInput from "./UI/input/MyInput";
-import MyButton from "./UI/button/MyButton";
+import MyButton from "./UI/buttonOld/MyButton";
 
 export type PostFormProps = {
     onAddNewPost(post: Post): void

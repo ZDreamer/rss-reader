@@ -1,5 +1,5 @@
-import React, {useState, useMemo} from 'react';
-import MyButton from "../button/MyButton";
+import React, {useMemo} from 'react';
+import MyButton from "../buttonOld/MyButton";
 import classes from "./Paginator.module.css";
 
 export type PaginatorProps = {

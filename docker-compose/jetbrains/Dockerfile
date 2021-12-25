@@ -13,6 +13,15 @@ RUN apt-get update && \
 #Install NPM
 RUN apt-get update && apt-get install -y npm nodejs
 
+#Install PHP
+RUN apt-get update && apt-get install -y php
+RUN apt-get update && apt-get install libcurl4-openssl-dev
+RUN apt-get update && apt-get install -y \
+    php-mbstring \
+    php-curl \
+    php-pgsql
+
+#Copy SSH Keys
 COPY  ./docker-compose/jetbrains/ssh/authorized_keys /home/jetbrains/.ssh/authorized_keys
 
 RUN service ssh start

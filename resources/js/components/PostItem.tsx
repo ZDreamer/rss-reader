@@ -1,5 +1,5 @@
 import React from 'react';
-import MyButton from "./UI/button/MyButton";
+import MyButton from "./UI/buttonOld/MyButton";
 import {useNavigate} from "react-router-dom";
 
 export type PostItemProps = {

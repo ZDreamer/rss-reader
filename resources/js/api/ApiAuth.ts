@@ -1,15 +1,15 @@
-const AuthService = {
+const ApiAuth = {
     isAuthenticated: false,
 
     signIn(callback: VoidFunction) {
-        AuthService.isAuthenticated = true;
+        ApiAuth.isAuthenticated = true;
         setTimeout(callback, 100); // fake async
     },
 
     signOut(callback: VoidFunction) {
-        AuthService.isAuthenticated = false;
+        ApiAuth.isAuthenticated = false;
         setTimeout(callback, 100);
     }
 };
 
-export default AuthService;
+export default ApiAuth;

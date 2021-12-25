@@ -89,3 +89,5 @@ volumes:
 networks:
   rss-reader:
     driver: bridge
+
+#https://github.com/Sam-R/laravel-docker-dev/blob/master/docker-compose.yml может быть полезно

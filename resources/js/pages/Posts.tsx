@@ -1,10 +1,8 @@
 import React, {useEffect, useRef, useState} from 'react';
-import '../../css/App.css';
 import PostList from "./../components/PostList";
 import PostForm from "./../components/PostForm";
 import PostFilter from "./../components/PostFilter";
-import MyModal from "./../components/UI/modal/MyModal";
-import MyButton from "./../components/UI/button/MyButton";
+import MyButton from "./../components/UI/buttonOld/MyButton";
 import {usePosts} from "../hooks/usePosts";
 import PostService from "../API/PostService";
 import {useFetching} from "../hooks/useFetching";
@@ -79,11 +77,11 @@ export default function Posts(): React.ReactElement {
                 onClick={() => setAddFormVisible(true)}
             >Добавить пост</MyButton>
 
-            <MyModal visible={addFormVisible} setVisible={setAddFormVisible}>
-                <PostForm
-                    onAddNewPost={onAddNewPost}
-                />
-            </MyModal>
+            {/*<Modal visible={addFormVisible} setVisible={setAddFormVisible}>*/}
+            {/*    <PostForm*/}
+            {/*        onAddNewPost={onAddNewPost}*/}
+            {/*    />*/}
+            {/*</Modal>*/}
 
             <hr style={{ margin: '15px 0'}}/>
 

@@ -27,7 +27,16 @@ const mix = require('laravel-mix');
 
 mix.ts('resources/js/app.tsx', 'public/js')
     .react()
-    .sass('resources/sass/app.scss', 'public/css')
+    //.sass('resources/sass/app.scss', 'public/css')
+    .less('resources/less/app.less', 'public/css', {
+        lessOptions: {
+            modifyVars: {
+                //'layout-header-background': '#f0f2f5'
+                //'primary-color': '#0BD37E',
+            },
+            javascriptEnabled: true,
+        },
+    })
     .extract(['react', 'react-dom', 'react-router-dom'])
     .version()
     .browserSync({
@@ -38,6 +47,7 @@ mix.ts('resources/js/app.tsx', 'public/js')
         files: [
             'public/**/*.(js|css)',
         ],
+        notify: false
     })
     .webpackConfig({
 
