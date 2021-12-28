@@ -1,5 +1,7 @@
 <?php
-
+/*
+ * https://github.com/symfony/demo - Demo symfony application
+ */
 use App\Kernel;
 
 require_once dirname(__DIR__).'/vendor/autoload_runtime.php';

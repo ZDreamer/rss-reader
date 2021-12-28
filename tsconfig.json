@@ -14,5 +14,5 @@
             "dom",
         ]
     },
-    "include": ["resources/js/**/*"]
+    "include": ["assets/js/**/*"]
 }
