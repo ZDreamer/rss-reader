@@ -1,21 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import {useParams} from "react-router-dom";
 import {useFetching} from "../hooks/useFetching";
-import PostService from "../API/PostService";
+import PostService from "../API_old/PostService";
 import Loader from "../components/UI/Loader/Loader";
 
-export type PostProps = {}
-
-const PostPage = ({}: PostProps): JSX.Element => {
+const PostPage = (): JSX.Element => {
     const params = useParams();
-
-    if (!params.id) {
-        return (
-            <h1 style={{textAlign: 'center'}}>
-                Пост не найдены!
-            </h1>
-        );
-    }
 
     const [post, setPost] = useState<Post>();
     const [postComments, setPostComments] = useState<PostComments>();
@@ -36,6 +26,14 @@ const PostPage = ({}: PostProps): JSX.Element => {
         fetchPost(params.id);
         fetchComments(params.id);
     }, []);
+
+    if (!params.id) {
+        return (
+            <h1 style={{textAlign: 'center'}}>
+                Пост не найдены!
+            </h1>
+        );
+    }
 
     if (postLoadError || commentsLoadError) {
         return (

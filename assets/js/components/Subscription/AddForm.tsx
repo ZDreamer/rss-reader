@@ -57,20 +57,24 @@ const SubscriptionAddForm: SubscriptionAddFormType = ({
                     type="text" placeholder="Title"
                 />
                 <Select  style={{width: '100%'}} mode="tags" placeholder="Tags" onChange={(valueList:string[]) => {
-                    const tagsIds = [];
-                    const newTagNames = [];
+                    const tags = [];
 
                     for (let i = 0; i < valueList.length; i++) {
                         const value = valueList[i];
 
                         if (value.match(tagIdPrefixRegExp)) {
-                            tagsIds.push(parseInt(value.replace(tagIdPrefix, '')));
+                            tags.push({
+                                id: parseInt(value.replace(tagIdPrefix, '')),
+                                title: value,
+                            });
                         } else {
-                            newTagNames.push(value);
+                            tags.push({
+                                title: value,
+                            });
                         }
                     }
 
-                    setSubscription({...subscription, tagsIds, newTagNames});
+                    setSubscription({...subscription, tags});
                 }}>
                     {tagList}
                 </Select>

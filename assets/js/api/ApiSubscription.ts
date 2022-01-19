@@ -1,20 +1,28 @@
 import axios from "axios";
 
+export interface ISubscriptionTag {
+    id?: number,
+    title?: string
+}
+
 export interface ISubscription {
     title: string
     url: string,
-    tagsIds: number[],
-    newTagNames?: string[]
+    tags: ISubscriptionTag[]
 }
 
 export default class ApiSubscription {
     static defaultValue = {
         url: '',
         title: '',
-        tagsIds: []
+        tags: []
     }
 
     static async save(subscription: ISubscription) {
-        return await axios.post('/api/subscription', subscription);
+        return await axios.post('/api/subscriptions', subscription);
+    }
+
+    static async getTree() {
+        return await axios.get('/api/subscriptions');
     }
 }

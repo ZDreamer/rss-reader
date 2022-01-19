@@ -4,7 +4,8 @@ import AuthStatus from "./Auth/AuthStatus";
 import Navigation from "./Navigation";
 import SubscriptionAddButton from "./Subscription/AddButton";
 import SubscriptionLayoutTree from "./Subscription/LayoutTree";
-import {Layout, Menu} from "antd";
+import {Layout} from "antd";
+import GlobalFetchingIndicator from "./GlobalFetchingIndicator";
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -17,6 +18,8 @@ const MyLayout: FC = () => {
                 <SubscriptionAddButton/>
 
                 <Navigation/>
+
+                <GlobalFetchingIndicator/>
             </Header>
 
             <Layout>

@@ -5,7 +5,7 @@ import PostFilter from "./../components/PostFilter";
 import MyButton from "./../components/UI/buttonOld/MyButton";
 import {usePosts} from "../hooks/usePosts";
 
-import PostService from "../API/PostService2";
+import PostService from "../API_old/PostService";
 import {useFetching} from "../hooks/useFetching";
 import Paginator from "./../components/UI/Paginator/Paginator";
 import Loader from "../components/UI/Loader/Loader";

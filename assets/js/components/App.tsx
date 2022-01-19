@@ -7,39 +7,41 @@ import AuthProvider from "./Auth/AuthProvider";
 import AuthRequired from "./Auth/AuthRequired";
 import ProtectedPage from "../pages/ProtectedPage";
 import LoginPage from "../pages/LoginPage";
+import {QueryClient, QueryClientProvider} from "react-query";
+import {ReactQueryDevtools} from "react-query/devtools";
 
-//https://reactrouter.com/docs/en/v6/examples/auth
-//https://ant.design/components/overview/
-/*
-    all folder
-    Can add subscriptions
-    Can add folders
-    Can put subscription in several folders
-    can name/rename subscriptions/folders
+const queryClient = new QueryClient({
+    defaultOptions: {
+        queries: {
+            refetchOnWindowFocus: false,
+            retry: false
+        },
+    },
+});
 
-    fixed order of folders
-    no fixed order for subscriptions, auto sort, with new on top
- */
 const App: FC = () => {
     return (
-        <AuthProvider>
-            <Routes>
-                <Route element={<MyLayout/>}>
-                    <Route path="/" element={<h1>Главная страница</h1>} />
-                    <Route path="/login" element={<LoginPage />} />
-                    <Route path="/about" element={<About/>} />
-                    <Route
-                        path="/protected"
-                        element={
-                            <AuthRequired>
-                                <ProtectedPage />
-                            </AuthRequired>
-                        }
-                    />
-                    <Route path="*" element={<NotFound/>} />
-                </Route>
-            </Routes>
-        </AuthProvider>
+        <QueryClientProvider client={queryClient}>
+            <AuthProvider>
+                <Routes>
+                    <Route element={<MyLayout/>}>
+                        <Route path="/" element={<h1>Главная страница</h1>} />
+                        <Route path="/login" element={<LoginPage />} />
+                        <Route path="/about" element={<About/>} />
+                        <Route
+                            path="/protected"
+                            element={
+                                <AuthRequired>
+                                    <ProtectedPage />
+                                </AuthRequired>
+                            }
+                        />
+                        <Route path="*" element={<NotFound/>} />
+                    </Route>
+                </Routes>
+            </AuthProvider>
+            <ReactQueryDevtools initialIsOpen={false} />
+        </QueryClientProvider>
     );
 };
 

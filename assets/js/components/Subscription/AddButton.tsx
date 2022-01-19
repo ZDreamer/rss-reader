@@ -2,14 +2,21 @@ import React, {useState} from 'react';
 import ApiSubscription, {ISubscription} from "../../api/ApiSubscription";
 import {Button, Modal} from "antd";
 import AddForm from "./AddForm";
+import {useMutation, useQueryClient} from "react-query";
 
 const SubscriptionAddButton: React.FC = () => {
     const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
+    const queryClient = useQueryClient();
+    const addNewSubscriptionMutation = useMutation((subscription: ISubscription) => {
+        return ApiSubscription.save(subscription);
+    }, {
+        onSuccess: (data, variables, context) => {
+            queryClient.invalidateQueries('tree');
+        }
+    });
 
     const onAddNewSubscription = async function (subscription: ISubscription) {
-        await ApiSubscription.save(subscription);
-
-        console.log('added');
+        addNewSubscriptionMutation.mutate(subscription);
     };
 
     return (

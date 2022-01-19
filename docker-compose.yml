@@ -18,7 +18,7 @@ services:
 
   nginx:
     image: nginx:alpine
-    container_name: my-nginx
+    container_name: rss
     restart: unless-stopped
     ports:
       - "8000:80"

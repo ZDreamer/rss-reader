@@ -99,7 +99,7 @@ config.plugins.push(
     new BrowserSyncPlugin(
         {
             host: 'localhost',
-            proxy: 'my-nginx',
+            proxy: 'rss',
             port: 3000,
             open: false,
             files: [
