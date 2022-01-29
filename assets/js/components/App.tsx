@@ -1,6 +1,5 @@
 import React, {FC} from 'react';
 import {Route, Routes} from "react-router-dom";
-import About from "../pages/About";
 import NotFound from "../pages/NotFound";
 import MyLayout from "./MyLayout";
 import AuthProvider from "./Auth/AuthProvider";
@@ -9,6 +8,7 @@ import ProtectedPage from "../pages/ProtectedPage";
 import LoginPage from "../pages/LoginPage";
 import {QueryClient, QueryClientProvider} from "react-query";
 import {ReactQueryDevtools} from "react-query/devtools";
+import axios from "axios";
 
 const queryClient = new QueryClient({
     defaultOptions: {
@@ -27,7 +27,6 @@ const App: FC = () => {
                     <Route element={<MyLayout/>}>
                         <Route path="/" element={<h1>Главная страница</h1>} />
                         <Route path="/login" element={<LoginPage />} />
-                        <Route path="/about" element={<About/>} />
                         <Route
                             path="/protected"
                             element={

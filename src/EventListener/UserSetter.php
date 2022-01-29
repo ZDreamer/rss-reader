@@ -2,7 +2,7 @@
 namespace App\EventListener;
 
 use App\Entity\Subscription;
-use App\Entity\SubscriptionTag;
+use App\Entity\Folder;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\Event\LifecycleEventArgs;
@@ -17,7 +17,7 @@ class UserSetter
     {
         $entity = $args->getObject();
 
-        if (!$entity instanceof Subscription && !$entity instanceof SubscriptionTag) {
+        if (!$entity instanceof Subscription && !$entity instanceof Folder) {
             return;
         }
 

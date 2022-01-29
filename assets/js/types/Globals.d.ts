@@ -36,6 +36,6 @@ type PageFilter = {
 
 interface AuthContextType {
     user: any;
-    signIn: (user: string, callback: VoidFunction) => void;
+    signIn: (user: any, callback: VoidFunction) => void;
     signOut: (callback: VoidFunction) => void;
 }

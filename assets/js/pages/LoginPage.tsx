@@ -17,7 +17,7 @@ const LoginPage = ({}: LoginPageProps): JSX.Element => {
         let formData = new FormData(event.currentTarget);
         let username = formData.get("username") as string;
 
-        auth.signIn(username, () => {
+        auth.signIn({id: 1, name: username }, () => {
             // Send them back to the page they tried to visit when they were
             // redirected to the login page. Use { replace: true } so we don't create
             // another entry in the history stack for the login page.  This means that

@@ -4,16 +4,19 @@ import ApiAuth from "../../api/ApiAuth";
 export const AuthContext = React.createContext<AuthContextType>(null!);
 
 function AuthProvider({ children }: { children: React.ReactNode }) {
-    let [user, setUser] = React.useState<any>(null);
+    const [user, setUser] = React.useState<any>({
+        id: 1,
+        name: 'Bob'
+    });
 
-    let signIn = (newUser: string, callback: VoidFunction) => {
+    const signIn = (newUser: string, callback: VoidFunction) => {
         return ApiAuth.signIn(() => {
             setUser(newUser);
             callback();
         });
     };
 
-    let signOut = (callback: VoidFunction) => {
+    const signOut = (callback: VoidFunction) => {
         return ApiAuth.signOut(() => {
             setUser(null);
             callback();

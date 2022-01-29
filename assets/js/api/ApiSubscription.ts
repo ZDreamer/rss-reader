@@ -6,6 +6,7 @@ export interface ISubscriptionTag {
 }
 
 export interface ISubscription {
+    id?: number,
     title: string
     url: string,
     tags: ISubscriptionTag[]
@@ -20,9 +21,5 @@ export default class ApiSubscription {
 
     static async save(subscription: ISubscription) {
         return await axios.post('/api/subscriptions', subscription);
-    }
-
-    static async getTree() {
-        return await axios.get('/api/subscriptions');
     }
 }

@@ -6,6 +6,8 @@ import SubscriptionAddButton from "./Subscription/AddButton";
 import SubscriptionLayoutTree from "./Subscription/LayoutTree";
 import {Layout} from "antd";
 import GlobalFetchingIndicator from "./GlobalFetchingIndicator";
+import FolderAddButton from "./Folder/AddButton";
+import SubscriptionLayoutTreeOld from "./Subscription/LayoutTreeOld";
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -15,6 +17,8 @@ const MyLayout: FC = () => {
             <Header>
                 <AuthStatus />
 
+                <FolderAddButton/>
+
                 <SubscriptionAddButton/>
 
                 <Navigation/>
@@ -23,13 +27,15 @@ const MyLayout: FC = () => {
             </Header>
 
             <Layout>
+                <Sider width="300">
+                    <SubscriptionLayoutTree/>
+
+                    {/*<SubscriptionLayoutTreeOld/>*/}
+                </Sider>
+
                 <Content>
                     <Outlet />
                 </Content>
-
-                <Sider width="200">
-                    <SubscriptionLayoutTree/>
-                </Sider>
             </Layout>
         </Layout>
     );

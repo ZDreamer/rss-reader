@@ -2,10 +2,10 @@
 namespace App\DataPersister;
 
 use ApiPlatform\Core\DataPersister\ContextAwareDataPersisterInterface;
-use App\Entity\Subscription;
+use App\Entity\Folder;
 use Doctrine\ORM\EntityManagerInterface;
 
-final class SubscriptionDataPersister implements ContextAwareDataPersisterInterface
+final class FolderDataPersister implements ContextAwareDataPersisterInterface
 {
     private $em;
 
@@ -16,22 +16,13 @@ final class SubscriptionDataPersister implements ContextAwareDataPersisterInterf
 
     public function supports($data, array $context = []): bool
     {
-        return $data instanceof Subscription;
+        return $data instanceof Folder;
     }
 
     public function persist($data, array $context = [])
     {
         $this->em->persist($data);
         $this->em->flush();
-
-//        if (
-//            $data instanceof User && (
-//                ($context['collection_operation_name'] ?? null) === 'post' ||
-//                ($context['graphql_operation_name'] ?? null) === 'create'
-//            )
-//        ) {
-//            $this->sendWelcomeEmail($data);
-//        }
     }
 
     public function remove($data, array $context = [])

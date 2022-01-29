@@ -1,23 +1,25 @@
 import React from 'react';
-import ApiSubscription from "../../api/ApiSubscription";
-import {useQuery} from "react-query";
+import useSubscriptionTree from "../../hooks/useSubscriptionTree";
+import SubscriptionTree from "../../utils/SubscriptionTree";
+import LayoutTreeFolder from "./LayoutTreeFolder";
 
 const SubscriptionLayoutTree: React.FC = () => {
-    const {data, isError, error} = useQuery('tree', ApiSubscription.getTree);
+    const {data: tree, error} = useSubscriptionTree();
 
-    if (data) {
+    if (tree) {
+        const rootFolder = SubscriptionTree.getRootFolder();
+
         return (
-            <div>
-                {data.data['hydra:member'].map(item => (
-                    <div key={item.id}>
-                        {item.title}
-                    </div>
-                ))}
-            </div>
+            <ul className="ant-menu ant-menu-root ant-menu-inline ant-menu-light">
+                <LayoutTreeFolder
+                    tree={tree}
+                    folder={rootFolder}
+                />
+            </ul>
         );
     }
 
-    if (isError) {
+    if (error) {
         return <span>Error: {error.message}</span>
     }
 

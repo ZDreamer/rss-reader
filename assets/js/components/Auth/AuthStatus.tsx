@@ -12,7 +12,7 @@ const AuthStatus = (): JSX.Element => {
 
     return (
         <p>
-            Welcome {auth.user}!{" "}
+            Welcome {auth.user.name}!{" "}
             <button
                 onClick={() => {
                     auth.signOut(() => navigate("/"));
