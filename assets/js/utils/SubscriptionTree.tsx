@@ -1,5 +1,4 @@
-import {ISubscriptionTree} from "../api/ApiUser";
-import {IFolder} from "../api/ApiFolder";
+import {IFolder, ISubscriptionTree} from "../api/ApiFolder";
 
 class SubscriptionTreeClass  {
     folderIndex: undefined | IFolder[];
@@ -63,6 +62,20 @@ class SubscriptionTreeClass  {
         }
 
         return depth;
+    }
+
+    getTreeWithUpdatedFolder(originalTree: ISubscriptionTree, folderToUpdate: Partial<IFolder>): ISubscriptionTree {
+        const tree = JSON.parse(JSON.stringify(originalTree));
+
+        for (const i in tree.folders) {
+            const folder = tree.folders[i];
+
+            if (folder.id === folderToUpdate.id) {
+                tree.folders[i] = {...folder, ...folderToUpdate};
+            }
+        }
+
+        return tree;
     }
 }
 

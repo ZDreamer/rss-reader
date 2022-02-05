@@ -1,12 +1,10 @@
 import React from 'react';
 import {Form, Input, Modal} from 'antd';
-import ApiFolder, {IFolder} from "../../api/ApiFolder";
+import {IFolderNew, ISubscriptionTree} from "../../api/ApiFolder";
 import SubscriptionTree from "../../utils/SubscriptionTree";
-import {useMutation, useQueryClient} from "react-query";
-import {AuthContext} from "../Auth/AuthProvider";
-import {ISubscriptionTree} from "../../api/ApiUser";
 import MutationErrors from "../MutationErrors";
 import FolderTreeSelect from "./TreeSelect";
+import useMutateFolder from "../../hooks/useMutateFolder";
 
 export type FolderAddFormType = React.FC<{
     tree: ISubscriptionTree,
@@ -20,20 +18,16 @@ const FolderAddForm: FolderAddFormType = ({
     setIsModalVisible
 }) => {
     const [form] = Form.useForm();
-    const queryClient = useQueryClient();
-    const auth = React.useContext(AuthContext);
-    const mutation = useMutation((folder: IFolder) => {
-        return ApiFolder.save(folder);
-    }, {
-        onSuccess: (data, variables, context) => {
+    const mutation = useMutateFolder({
+        onSuccess: () => {
             setIsModalVisible(false);
-
-            queryClient.invalidateQueries(['user', auth.user.id, 'subscriptionTree']);
         }
     });
 
-    const addNewFolder = async function (folder: IFolder) {
-        mutation.mutate(folder);
+    const addNewFolder = async function (folder: IFolderNew) {
+        mutation.mutate({
+            folder: folder
+        });
     }
 
     let modalBody;

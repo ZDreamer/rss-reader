@@ -2,17 +2,12 @@ import axios, {AxiosError, AxiosResponse} from "axios";
 
 const client = (() => {
     return axios.create({
-        baseURL: "/api",
-        headers: {
-            common: {
-                Accept: 'application/json'
-            }
-        }
+        baseURL: "/api"
     });
 })();
 
 const request = async function<Type>(
-    method: "GET" | "POST",
+    method: "GET" | "POST" | "PATCH",
     url: string,
     data: unknown = {}
 ): Promise<Type> {
@@ -24,8 +19,15 @@ const request = async function<Type>(
         return Promise.reject(error.response);
     };
 
-    // adding success and error handlers to client
-    return client({ method, url, data }).then(onSuccess).catch(onError);
+    return client({
+        url,
+        method,
+        data,
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': method == 'PATCH' ? 'application/merge-patch+json' : 'application/json'
+        }
+    }).then(onSuccess).catch(onError);
 };
 
 const Api = {
@@ -35,6 +37,10 @@ const Api = {
 
     post: async function<Type>(url: string, data: unknown): Promise<Type> {
         return await request('POST', url, data);
+    },
+
+    patch: async function<Type>(url: string, data: unknown): Promise<Type> {
+        return await request('PATCH', url, data);
     }
 };
 

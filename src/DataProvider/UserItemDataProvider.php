@@ -21,37 +21,10 @@ final class UserItemDataProvider implements ItemDataProviderInterface, Restricte
 
     public function getItem(string $resourceClass, $id, string $operationName = null, array $context = [])
     {
-        if ($operationName == 'get_subscription_tree') {
-            return $this->getSubscriptionTree($id);
+        if (false) {
+
         } else {
             throw new \Exception('Unknown operation ' . $operationName);
         }
-    }
-
-    private function getSubscriptionTree($userId)
-    {
-        $subscriptions = $this->em->createQuery("
-            SELECT
-                s.id,
-                s.title,
-                s.url
-            FROM App\Entity\Subscription s
-            WHERE s.owner = :user_id
-        ")->setParameters(['user_id' => $userId])->getArrayResult();
-
-        $folders = $this->em->createQuery("
-            SELECT
-                f.id,
-                f.title,
-                f.isOpened,
-                COALESCE(IDENTITY(f.parent), 0) AS parent
-            FROM App\Entity\Folder f
-            WHERE f.owner = :user_id
-        ")->setParameters(['user_id' => $userId])->getArrayResult();
-
-        return [
-            'subscriptions' => $subscriptions,
-            'folders' => $folders,
-        ];
     }
 }

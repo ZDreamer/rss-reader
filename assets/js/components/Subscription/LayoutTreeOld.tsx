@@ -1,7 +1,7 @@
 import React from 'react';
 import useSubscriptionTree from "../../hooks/useSubscriptionTree";
 import SubscriptionTree from "../../utils/SubscriptionTree";
-import {ISubscriptionTree} from "../../api/ApiUser";
+import {ISubscriptionTree} from "../../api/ApiFolder";
 import {IFolder} from "../../api/ApiFolder";
 import {Menu} from "antd";
 

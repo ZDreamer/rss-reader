@@ -15,10 +15,10 @@ use Symfony\Component\Security\Core\User\UserInterface;
        'get',
     ],
     itemOperations: [
-        'get_subscription_tree' => [
-            'method' => 'GET',
-            'path' => '/users/{id}/get_subscription_tree',
-        ],
+//        'get_subscription_tree' => [
+//            'method' => 'GET',
+//            'path' => '/users/{id}/get_subscription_tree',
+//        ],
     ]
 )]
 class User implements UserInterface, PasswordAuthenticatedUserInterface

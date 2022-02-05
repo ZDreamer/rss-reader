@@ -7,6 +7,4 @@ class FolderInputPost
     public string $title;
 
     public int $parent;
-
-    public bool $isOpened;
 }

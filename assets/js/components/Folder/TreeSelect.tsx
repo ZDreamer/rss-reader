@@ -1,6 +1,6 @@
 import React from 'react';
 import {TreeSelect} from "antd";
-import {ISubscriptionTree} from "../../api/ApiUser";
+import {ISubscriptionTree} from "../../api/ApiFolder";
 import {IFolder} from "../../api/ApiFolder";
 import SubscriptionTree from "../../utils/SubscriptionTree";
 

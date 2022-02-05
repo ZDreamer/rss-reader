@@ -1,16 +1,17 @@
 import {useQuery} from "react-query";
-import ApiUser, {ISubscriptionTree} from "../api/ApiUser";
-import React from "react";
+import {ISubscriptionTree} from "../api/ApiFolder";
+import {useContext} from "react";
 import {AuthContext} from "../components/Auth/AuthProvider";
 import {AxiosError} from "axios";
 import SubscriptionTree from "../utils/SubscriptionTree";
+import ApiFolder from "../api/ApiFolder";
 
 function useSubscriptionTree() {
-    const auth = React.useContext(AuthContext);
+    const auth = useContext(AuthContext);
 
     return useQuery<ISubscriptionTree, AxiosError>(
-        ['user', auth.user.id, 'subscriptionTree'],
-        ApiUser.getSubscriptionTree,
+        ['subscriptionTree'],
+        ApiFolder.getTree,
         {
             staleTime: Infinity,
             cacheTime: Infinity,

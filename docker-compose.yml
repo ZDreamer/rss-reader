@@ -7,8 +7,8 @@ services:
         uid: 1000
       context: ./
       dockerfile: docker-compose/app/Dockerfile
-    image: rss-reader
-    container_name: my-app
+    image: rss-app
+    container_name: rss-app
     restart: unless-stopped
     working_dir: /var/www/
     volumes:
@@ -17,11 +17,11 @@ services:
       - rss-reader
 
   nginx:
-    image: nginx:alpine
+    image: nginx:1.21-alpine
     container_name: rss
     restart: unless-stopped
     ports:
-      - "8000:80"
+      - "8001:80"
     volumes:
       - ./:/var/www
       - ./docker-compose/nginx:/etc/nginx/conf.d/
@@ -63,6 +63,7 @@ services:
         uid: 1000
       context: ./
       dockerfile: docker-compose/jetbrains/Dockerfile
+    image: rss-dev
     ports:
       - "3000:3000"
       - "3001:3001"

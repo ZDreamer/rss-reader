@@ -3,24 +3,28 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use App\Dto\FolderInputPatch;
 use App\Dto\FolderInputPost;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity]
 #[ORM\HasLifecycleCallbacks]
 #[ApiResource(
     collectionOperations: [
-        'get',
+        'get_tree' => [
+            'method' => 'GET',
+            'path' => '/folders/get_tree',
+        ],
         'post' => [
             'input' => FolderInputPost::class,
+            'output' => false,
         ],
     ],
     itemOperations: [
-        'get',
         'patch' => [
-            'denormalization_context' => ['groups' => ['save', 'edit']],
+            'input' => FolderInputPatch::class,
+            'output' => false,
         ],
         'delete',
     ]
@@ -34,7 +38,6 @@ class Folder
 
     #[ORM\Column(type: 'string', length: 255)]
     #[Assert\NotBlank]
-    #[Groups(["save"])]
     private $title;
 
     #[ORM\Column(type: 'datetime')]

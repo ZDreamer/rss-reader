@@ -1,4 +1,6 @@
 import Api from "./Api";
+import {ISubscription} from "./ApiSubscription";
+import {QueryFunctionContext} from "react-query/types/core/types";
 
 export interface IFolder {
     id: number,
@@ -7,13 +9,31 @@ export interface IFolder {
     isOpened: boolean,
 }
 
+export interface IFolderNew {
+    title: string,
+    parent: number
+}
+
+export type IFolderPatch = Partial<IFolder> & {id: number}
+
+export interface ISubscriptionTree {
+    subscriptions: ISubscription[],
+    folders: IFolder[]
+}
+
 export default class ApiFolder {
-    static async save(folder: IFolder) {
+    static async create(folder: IFolderNew) {
         const postData = { ...folder } as Partial<IFolder>;
-        if (postData.id === 0) {
-            delete postData.id;
-        }
+        delete postData.id;
 
         return await Api.post('/folders', postData);
+    }
+
+    static async modify(folder: IFolderPatch) {
+        return await Api.patch(`/folders/${folder.id}`, folder);
+    }
+
+    static async getTree(context: QueryFunctionContext) {
+        return await Api.get<ISubscriptionTree>(`/folders/get_tree`);
     }
 }
