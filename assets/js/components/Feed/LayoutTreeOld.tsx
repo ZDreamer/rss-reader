@@ -1,20 +1,20 @@
 import React from 'react';
-import useSubscriptionTree from "../../hooks/useSubscriptionTree";
-import SubscriptionTree from "../../utils/SubscriptionTree";
-import {ISubscriptionTree} from "../../api/ApiFolder";
+import useFeedTree from "../../hooks/useFeedTree";
+import FeedTree from "../../utils/FeedTree";
+import {IFeedTree} from "../../api/ApiFolder";
 import {IFolder} from "../../api/ApiFolder";
 import {Menu} from "antd";
 
-const SubscriptionLayoutTreeOld: React.FC = () => {
-    const {data: tree, error} = useSubscriptionTree();
+const FeedLayoutTreeOld: React.FC = () => {
+    const {data: tree, error} = useFeedTree();
 
-    const getTreeNodeTree = function (tree: ISubscriptionTree, folder: IFolder) {
+    const getTreeNodeTree = function (tree: IFeedTree, folder: IFolder) {
         return (
             <Menu.SubMenu
                 key={folder.id}
                 title={folder.title}
             >
-                {SubscriptionTree.getFolderSubFolders(folder).map(
+                {FeedTree.getFolderSubFolders(folder).map(
                     item => getTreeNodeTree(tree, item)
                 )}
             </Menu.SubMenu>
@@ -22,8 +22,8 @@ const SubscriptionLayoutTreeOld: React.FC = () => {
     }
 
     if (tree) {
-        const rootFolder = SubscriptionTree.getRootFolder();
-        const openedFolderIds = SubscriptionTree.getOpenedFolders();
+        const rootFolder = FeedTree.getRootFolder();
+        const openedFolderIds = FeedTree.getOpenedFolders();
 
         return (
             <Menu
@@ -42,4 +42,4 @@ const SubscriptionLayoutTreeOld: React.FC = () => {
     return <span>Loading...</span>
 };
 
-export default SubscriptionLayoutTreeOld;
+export default FeedLayoutTreeOld;

@@ -6,18 +6,18 @@ use Doctrine\ORM\Mapping as ORM;
 use DateTimeInterface;
 
 #[ORM\Entity()]
-#[ORM\Table(name: '`subscription_folder`')]
+#[ORM\Table(name: '`feed_folder`')]
 #[ORM\HasLifecycleCallbacks]
-class SubscriptionFolder
+class FeedFolder
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
     private $id;
 
-    #[ORM\ManyToOne(targetEntity: Subscription::class, inversedBy: "folders")]
+    #[ORM\ManyToOne(targetEntity: Feed::class, inversedBy: "folders")]
     #[ORM\JoinColumn(nullable: false)]
-    private $subscription;
+    private $feed;
 
     #[ORM\ManyToOne(targetEntity: Folder::class)]
     #[ORM\JoinColumn(nullable: false)]

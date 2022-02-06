@@ -1,19 +1,21 @@
 import React from 'react';
 import {Form, Input, Modal} from 'antd';
-import {IFolderNew, ISubscriptionTree} from "../../api/ApiFolder";
-import SubscriptionTree from "../../utils/SubscriptionTree";
+import {IFolderNew, IFeedTree} from "../../api/ApiFolder";
+import FeedTree from "../../utils/FeedTree";
 import MutationErrors from "../MutationErrors";
 import FolderTreeSelect from "./TreeSelect";
 import useMutateFolder from "../../hooks/useMutateFolder";
 
-export type FolderAddFormType = React.FC<{
-    tree: ISubscriptionTree,
+export type FolderEditFormType = React.FC<{
+    tree: IFeedTree,
+    folderId: number,
     isModalVisible: boolean,
     setIsModalVisible: (isModalVisible: boolean) => void
 }>
 
-const FolderAddForm: FolderAddFormType = ({
+const FolderEditForm: FolderEditFormType = ({
     tree,
+    folderId,
     isModalVisible,
     setIsModalVisible
 }) => {
@@ -24,7 +26,7 @@ const FolderAddForm: FolderAddFormType = ({
         }
     });
 
-    const addNewFolder = async function (folder: IFolderNew) {
+    const editFolder = async function (folder: IFolderNew) {
         mutation.mutate({
             folder: folder
         });
@@ -32,12 +34,16 @@ const FolderAddForm: FolderAddFormType = ({
 
     let modalBody;
     if (tree) {
-        const folder = SubscriptionTree.getNewFolder();
+        const folder = folderId ?
+            FeedTree.getFolder(folderId)
+        :   FeedTree.getNewFolder();
+
+        console.log(folder);
 
         modalBody = (
             <Form
                 form={form}
-                onFinish={addNewFolder}
+                onFinish={editFolder}
                 initialValues={folder}
             >
                 {mutation.error && (
@@ -76,6 +82,7 @@ const FolderAddForm: FolderAddFormType = ({
             title="Adding folder"
             okText="Add"
             visible={isModalVisible}
+
             onOk={() => {
                 form.submit();
             }}
@@ -92,4 +99,4 @@ const FolderAddForm: FolderAddFormType = ({
     );
 };
 
-export default FolderAddForm;
+export default FolderEditForm;

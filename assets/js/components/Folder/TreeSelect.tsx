@@ -1,13 +1,13 @@
 import React from 'react';
 import {TreeSelect} from "antd";
-import {ISubscriptionTree} from "../../api/ApiFolder";
+import {IFeedTree} from "../../api/ApiFolder";
 import {IFolder} from "../../api/ApiFolder";
-import SubscriptionTree from "../../utils/SubscriptionTree";
+import FeedTree from "../../utils/FeedTree";
 
 const { TreeNode } = TreeSelect;
 
 export type FolderTreeSelectType = React.FC<{
-    tree: ISubscriptionTree,
+    tree: IFeedTree,
     value?: number,
     onChange?(value: number): void
 }>
@@ -21,10 +21,10 @@ const FolderTreeSelect: FolderTreeSelectType = ({
         onChange && onChange(value);
     };
 
-    const getTreeNodeTree = function (tree: ISubscriptionTree, folder: IFolder) {
+    const getTreeNodeTree = function (tree: IFeedTree, folder: IFolder) {
         return (
             <TreeNode key={folder.id} value={folder.id} title={folder.title}>
-                {SubscriptionTree.getFolderSubFolders(folder).map(
+                {FeedTree.getFolderSubFolders(folder).map(
                     item => getTreeNodeTree(tree, item)
                 )}
             </TreeNode>
@@ -44,7 +44,7 @@ const FolderTreeSelect: FolderTreeSelectType = ({
         >
             {getTreeNodeTree(
                 tree,
-                SubscriptionTree.getRootFolder()
+                FeedTree.getRootFolder()
             )}
         </TreeSelect>
     );

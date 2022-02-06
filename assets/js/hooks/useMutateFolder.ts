@@ -1,7 +1,7 @@
 import {useMutation, useQueryClient} from "react-query";
 import ApiFolder, {IFolder, IFolderNew, IFolderPatch} from "../api/ApiFolder";
-import {ISubscriptionTree} from "../api/ApiFolder";
-import SubscriptionTree from "../utils/SubscriptionTree";
+import {IFeedTree} from "../api/ApiFolder";
+import FeedTree from "../utils/FeedTree";
 
 type IMutateFolderProps = {
     onSuccess?: () => void
@@ -11,13 +11,10 @@ type IMutateFolderMutateProps = {
     folder: IFolderNew | IFolderPatch
 }
 
-function useMutateFolder(o: IMutateFolderProps) {
+function useMutateFolder(o?: IMutateFolderProps) {
     const queryClient = useQueryClient()
 
     return useMutation(({ folder }: IMutateFolderMutateProps) => {
-        console.log('folder');
-        console.log(folder);
-
         if ('id' in folder) {
             return ApiFolder.modify(folder);
         } else {
@@ -27,14 +24,14 @@ function useMutateFolder(o: IMutateFolderProps) {
         onMutate: async ({ folder }: IMutateFolderMutateProps) => {
             if ('id' in folder) {
                 // Cancel any outgoing refetches (so they don't overwrite our optimistic update)
-                await queryClient.cancelQueries(['subscriptionTree']);
+                await queryClient.cancelQueries(['feedTree']);
 
-                const previousTree = queryClient.getQueryData<ISubscriptionTree>(['subscriptionTree']);
+                const previousTree = queryClient.getQueryData<IFeedTree>(['feedTree']);
 
                 if (previousTree) {
-                    queryClient.setQueryData<ISubscriptionTree>(
-                        ['subscriptionTree'],
-                        SubscriptionTree.getTreeWithUpdatedFolder(previousTree, folder)
+                    queryClient.setQueryData<IFeedTree>(
+                        ['feedTree'],
+                        FeedTree.getTreeWithUpdatedFolder(previousTree, folder)
                     );
                 }
 
@@ -46,7 +43,7 @@ function useMutateFolder(o: IMutateFolderProps) {
 
         onSuccess: (data, variables, context) => {
             if (context.invalidate) {
-                queryClient.invalidateQueries(['subscriptionTree']);
+                queryClient.invalidateQueries(['feedTree']);
             }
 
             o && o.onSuccess && o.onSuccess();
@@ -55,8 +52,8 @@ function useMutateFolder(o: IMutateFolderProps) {
         onError: (err, newTodo, context) => {
             // If the mutation fails, use the context returned from onMutate to roll back
             if (context?.previousTree) {
-                queryClient.setQueryData<ISubscriptionTree>(
-                    ['subscriptionTree'],
+                queryClient.setQueryData<IFeedTree>(
+                    ['feedTree'],
                     context.previousTree
                 );
             }

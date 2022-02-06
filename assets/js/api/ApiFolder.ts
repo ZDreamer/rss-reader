@@ -1,5 +1,5 @@
 import Api from "./Api";
-import {ISubscription} from "./ApiSubscription";
+import {IFeed} from "./ApiFeed";
 import {QueryFunctionContext} from "react-query/types/core/types";
 
 export interface IFolder {
@@ -16,8 +16,8 @@ export interface IFolderNew {
 
 export type IFolderPatch = Partial<IFolder> & {id: number}
 
-export interface ISubscriptionTree {
-    subscriptions: ISubscription[],
+export interface IFeedTree {
+    feeds: IFeed[],
     folders: IFolder[]
 }
 
@@ -34,6 +34,6 @@ export default class ApiFolder {
     }
 
     static async getTree(context: QueryFunctionContext) {
-        return await Api.get<ISubscriptionTree>(`/folders/get_tree`);
+        return await Api.get<IFeedTree>(`/folders/get_tree`);
     }
 }

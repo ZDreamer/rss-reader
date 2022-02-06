@@ -1,29 +1,29 @@
 import React, {useState} from 'react';
-import ApiSubscription, {ISubscription} from "../../api/ApiSubscription";
+import ApiFeed, {IFeed} from "../../api/ApiFeed";
 import {Input, Modal, Space, Select} from 'antd';
 
-export type SubscriptionAddFormType = React.FC<{
+export type FeedAddFormType = React.FC<{
     isModalVisible: boolean,
     setIsModalVisible: (isModalVisible: boolean) => void,
-    onAddNewSubscription: (subscription: ISubscription) => void
+    onAddNewFeed: (feed: IFeed) => void
 }>
 
 const {Option} = Select;
-const tagIdPrefix = 'SubscriptionAddFormTagIdPrefix_';
-const tagIdPrefixRegExp = /SubscriptionAddFormTagIdPrefix_\d+/;
+const tagIdPrefix = 'FeedAddFormTagIdPrefix_';
+const tagIdPrefixRegExp = /FeedAddFormTagIdPrefix_\d+/;
 
-const SubscriptionAddForm: SubscriptionAddFormType = ({
+const FeedAddForm: FeedAddFormType = ({
     isModalVisible,
     setIsModalVisible,
-    onAddNewSubscription
+    onAddNewFeed
 }) => {
-    const [subscription, setSubscription] = useState<ISubscription>(ApiSubscription.defaultValue);
+    const [feed, setFeed] = useState<IFeed>(ApiFeed.defaultValue);
 
-    const addNewSubscription = async function () {
+    const addNewFeed = async function () {
         setIsModalVisible(false);
-        setSubscription(ApiSubscription.defaultValue);
+        setFeed(ApiFeed.defaultValue);
 
-        onAddNewSubscription(subscription);
+        onAddNewFeed(feed);
     }
 
     const tagList = [];
@@ -36,24 +36,24 @@ const SubscriptionAddForm: SubscriptionAddFormType = ({
 
     return (
         <Modal
-            title="Adding subscription"
+            title="Adding feed"
             okText="Add"
             visible={isModalVisible}
-            onOk={addNewSubscription}
+            onOk={addNewFeed}
             onCancel={() => {
-                setSubscription(ApiSubscription.defaultValue);
+                setFeed(ApiFeed.defaultValue);
                 setIsModalVisible(false);
             }}
         >
             <Space direction="vertical" style={{width: '100%'}}>
                 <Input
-                    value={subscription.url}
-                    onChange={e => setSubscription({...subscription, url: e.target.value})}
+                    value={feed.url}
+                    onChange={e => setFeed({...feed, url: e.target.value})}
                     type="text" placeholder="URL"
                 />
                 <Input
-                    value={subscription.title}
-                    onChange={e => setSubscription({...subscription, title: e.target.value})}
+                    value={feed.title}
+                    onChange={e => setFeed({...feed, title: e.target.value})}
                     type="text" placeholder="Title"
                 />
                 <Select  style={{width: '100%'}} mode="tags" placeholder="Tags" onChange={(valueList:string[]) => {
@@ -74,7 +74,7 @@ const SubscriptionAddForm: SubscriptionAddFormType = ({
                         }
                     }
 
-                    setSubscription({...subscription, tags});
+                    setFeed({...feed, tags});
                 }}>
                     {tagList}
                 </Select>
@@ -83,4 +83,4 @@ const SubscriptionAddForm: SubscriptionAddFormType = ({
     );
 };
 
-export default SubscriptionAddForm;
+export default FeedAddForm;

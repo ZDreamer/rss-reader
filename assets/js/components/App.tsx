@@ -1,14 +1,14 @@
 import React, {FC} from 'react';
 import {Route, Routes} from "react-router-dom";
 import NotFound from "../pages/NotFound";
-import MyLayout from "./MyLayout";
+import LayoutMain from "./Layout/Main";
 import AuthProvider from "./Auth/AuthProvider";
 import AuthRequired from "./Auth/AuthRequired";
 import ProtectedPage from "../pages/ProtectedPage";
 import LoginPage from "../pages/LoginPage";
 import {QueryClient, QueryClientProvider} from "react-query";
 import {ReactQueryDevtools} from "react-query/devtools";
-import axios from "axios";
+import PageFolder from "./Page/Folder";
 
 const queryClient = new QueryClient({
     defaultOptions: {
@@ -24,17 +24,23 @@ const App: FC = () => {
         <QueryClientProvider client={queryClient}>
             <AuthProvider>
                 <Routes>
-                    <Route element={<MyLayout/>}>
-                        <Route path="/" element={<h1>Главная страница</h1>} />
-                        <Route path="/login" element={<LoginPage />} />
+                    <Route element={<LayoutMain/>}>
+                        <Route path="/" element={<PageFolder/>} />
+
+                        {/*TODO: Сделать красивые ссылки*/}
+                        <Route path="folder/:folderId" element={<PageFolder/>} />
+
+                        <Route path="login" element={<LoginPage />} />
+
                         <Route
-                            path="/protected"
+                            path="protected"
                             element={
                                 <AuthRequired>
                                     <ProtectedPage />
                                 </AuthRequired>
                             }
                         />
+
                         <Route path="*" element={<NotFound/>} />
                     </Route>
                 </Routes>

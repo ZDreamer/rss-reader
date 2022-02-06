@@ -11,16 +11,17 @@ const AuthStatus = (): JSX.Element => {
     }
 
     return (
-        <p>
+        <div>
             Welcome {auth.user.name}!{" "}
             <button
+                style={{height: '32px'}}
                 onClick={() => {
                     auth.signOut(() => navigate("/"));
                 }}
             >
                 Sign out
             </button>
-        </p>
+        </div>
     );
 };
 

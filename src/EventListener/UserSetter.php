@@ -1,7 +1,7 @@
 <?php
 namespace App\EventListener;
 
-use App\Entity\Subscription;
+use App\Entity\Feed;
 use App\Entity\Folder;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
@@ -17,7 +17,7 @@ class UserSetter
     {
         $entity = $args->getObject();
 
-        if (!$entity instanceof Subscription && !$entity instanceof Folder) {
+        if (!$entity instanceof Feed && !$entity instanceof Folder) {
             return;
         }
 

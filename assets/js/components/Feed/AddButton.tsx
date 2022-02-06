@@ -1,22 +1,23 @@
 import React, {useState} from 'react';
-import ApiSubscription, {ISubscription} from "../../api/ApiSubscription";
+import ApiFeed, {IFeed} from "../../api/ApiFeed";
 import {Button} from "antd";
 import AddForm from "./AddForm";
 import {useMutation, useQueryClient} from "react-query";
+import { AppstoreAddOutlined } from '@ant-design/icons';
 
-const SubscriptionAddButton: React.FC = () => {
+const FeedAddButton: React.FC = () => {
     const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
     const queryClient = useQueryClient();
-    const addNewSubscriptionMutation = useMutation((subscription: ISubscription) => {
-        return ApiSubscription.save(subscription);
+    const addNewFeedMutation = useMutation((feed: IFeed) => {
+        return ApiFeed.save(feed);
     }, {
         onSuccess: (data, variables, context) => {
-            queryClient.invalidateQueries(['subscriptionTree']);
+            queryClient.invalidateQueries(['feedTree']);
         }
     });
 
-    const onAddNewSubscription = async function (subscription: ISubscription) {
-        addNewSubscriptionMutation.mutate(subscription);
+    const onAddNewFeed = async function (feed: IFeed) {
+        addNewFeedMutation.mutate(feed);
     };
 
     return (
@@ -25,10 +26,10 @@ const SubscriptionAddButton: React.FC = () => {
                 e.preventDefault();
 
                 setIsModalVisible(true);
-            }}>Add subscription</Button>
+            }}><AppstoreAddOutlined /> Add feed</Button>
 
             <AddForm
-                onAddNewSubscription={onAddNewSubscription}
+                onAddNewFeed={onAddNewFeed}
                 isModalVisible={isModalVisible}
                 setIsModalVisible={setIsModalVisible}
             />
@@ -36,4 +37,4 @@ const SubscriptionAddButton: React.FC = () => {
     );
 };
 
-export default SubscriptionAddButton;
+export default FeedAddButton;

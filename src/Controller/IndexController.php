@@ -6,7 +6,16 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class IndexController extends AbstractController
 {
-    #[Route('/')]
+    #[Route(
+        '/{reactRouting}',
+        name: 'index',
+        requirements: [
+            'reactRouting' => '^(?!api).+'
+        ],
+        defaults: [
+            'reactRouting' => null
+        ]
+    )]
     public function number(): Response
     {
         return $this->render('index.html.twig', [

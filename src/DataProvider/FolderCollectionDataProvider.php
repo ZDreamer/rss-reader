@@ -4,7 +4,7 @@ namespace App\DataProvider;
 use ApiPlatform\Core\DataProvider\ContextAwareCollectionDataProviderInterface;
 use ApiPlatform\Core\DataProvider\RestrictedDataProviderInterface;
 use App\Entity\Folder;
-use App\Entity\Subscription;
+use App\Entity\Feed;
 use Doctrine\ORM\EntityManagerInterface;
 
 final class FolderCollectionDataProvider implements ContextAwareCollectionDataProviderInterface, RestrictedDataProviderInterface
@@ -32,15 +32,15 @@ final class FolderCollectionDataProvider implements ContextAwareCollectionDataPr
     private function getTree()
     {
         $userId = 1; //TODO: Тут надо брать реального пользователя
-        dump('userId:'.$userId);
 
-        $subscriptions = $this->em->createQuery("
+        $feeds = $this->em->createQuery("
             SELECT
                 s.id,
                 s.title,
                 s.url
-            FROM App\Entity\Subscription s
+            FROM App\Entity\Feed s
             WHERE s.owner = :user_id
+            ORDER BY s.id ASC
         ")->setParameters(['user_id' => $userId])->getArrayResult();
 
         $folders = $this->em->createQuery("
@@ -51,10 +51,11 @@ final class FolderCollectionDataProvider implements ContextAwareCollectionDataPr
                 COALESCE(IDENTITY(f.parent), 0) AS parent
             FROM App\Entity\Folder f
             WHERE f.owner = :user_id
-        ")->setParameters(['user_id' => $userId])->getArrayResult();
+            ORDER BY f.id ASC
+        ")->setParameters(['user_id' => $userId])->getArrayResult(); //TODO: сортировку через интерфейс
 
         return [
-            'subscriptions' => $subscriptions,
+            'feeds' => $feeds,
             'folders' => $folders,
         ];
     }

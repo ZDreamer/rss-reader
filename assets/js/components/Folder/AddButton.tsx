@@ -1,12 +1,13 @@
 import React, {useState} from 'react';
 import {Button} from "antd";
-import AddForm from "./AddForm";
-import useSubscriptionTree from "../../hooks/useSubscriptionTree";
+import EditForm from "./EditForm";
+import useFeedTree from "../../hooks/useFeedTree";
+import { FolderAddOutlined } from '@ant-design/icons';
 
 const FolderAddButton: React.FC = () => {
     const [isClicked, setIsClicked] = useState<boolean>(false);
-    const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
-    const {data: tree} = useSubscriptionTree();
+    const [isEditFormVisible, setIsEditFormVisible] = useState<boolean>(false);
+    const {data: tree} = useFeedTree();
 
     return (
         <div>
@@ -16,15 +17,16 @@ const FolderAddButton: React.FC = () => {
                     e.preventDefault();
 
                     setIsClicked(true);
-                    setIsModalVisible(true);
+                    setIsEditFormVisible(true);
                 }}
-            >Add folder</Button>
+            ><FolderAddOutlined /> Add folder</Button>
 
             {tree ? (
-                <AddForm
+                <EditForm
                     tree={tree}
-                    isModalVisible={isModalVisible}
-                    setIsModalVisible={setIsModalVisible}
+                    folderId={0}
+                    isModalVisible={isEditFormVisible}
+                    setIsModalVisible={setIsEditFormVisible}
                 />
             ) : ''}
         </div>

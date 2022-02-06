@@ -1,11 +1,11 @@
-import {IFolder, ISubscriptionTree} from "../api/ApiFolder";
+import {IFolder, IFeedTree} from "../api/ApiFolder";
 
-class SubscriptionTreeClass  {
+class FeedTreeClass  {
     folderIndex: undefined | IFolder[];
 
-    tree: undefined | ISubscriptionTree;
+    tree: undefined | IFeedTree;
 
-    setTree(tree: ISubscriptionTree) {
+    setTree(tree: IFeedTree) {
         this.tree = tree;
 
         const folderIndex: IFolder[] = [];
@@ -16,7 +16,7 @@ class SubscriptionTreeClass  {
         this.folderIndex = folderIndex;
     }
 
-    assertTree(): asserts this is {tree: ISubscriptionTree, folderIndex: IFolder[]} & this {
+    assertTree(): asserts this is {tree: IFeedTree, folderIndex: IFolder[]} & this {
         if (!this.tree) {
             throw 'tree is not defined';
         }
@@ -29,6 +29,12 @@ class SubscriptionTreeClass  {
             parent: this.getRootFolder().id,
             isOpened: true,
         };
+    }
+
+    getFolder(folderId: number) : IFolder {
+        this.assertTree();
+
+        return this.tree.folders.filter(item => item.id === folderId)[0];
     }
 
     getOpenedFolders(): number[] {
@@ -64,7 +70,7 @@ class SubscriptionTreeClass  {
         return depth;
     }
 
-    getTreeWithUpdatedFolder(originalTree: ISubscriptionTree, folderToUpdate: Partial<IFolder>): ISubscriptionTree {
+    getTreeWithUpdatedFolder(originalTree: IFeedTree, folderToUpdate: Partial<IFolder>): IFeedTree {
         const tree = JSON.parse(JSON.stringify(originalTree));
 
         for (const i in tree.folders) {
@@ -79,6 +85,6 @@ class SubscriptionTreeClass  {
     }
 }
 
-const SubscriptionTree = new SubscriptionTreeClass();
+const FeedTree = new FeedTreeClass();
 
-export default SubscriptionTree;
+export default FeedTree;

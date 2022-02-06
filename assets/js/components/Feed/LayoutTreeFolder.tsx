@@ -1,36 +1,38 @@
 import React, {useRef, useState} from 'react';
-import {ISubscriptionTree} from "../../api/ApiFolder";
-import ApiFolder, {IFolder} from "../../api/ApiFolder";
-import SubscriptionTree from "../../utils/SubscriptionTree";
+import {IFeedTree, IFolder} from "../../api/ApiFolder";
+import FeedTree from "../../utils/FeedTree";
 import classNames from "classnames";
 import {Transition} from "react-transition-group";
-import {useMutation} from "react-query";
 import useMutateFolder from "../../hooks/useMutateFolder";
+import {NavLink} from "react-router-dom";
 
-export type SubscriptionLayoutTreeFolderType = React.FC<{
-    tree: ISubscriptionTree,
-    folder: IFolder
+export type FeedLayoutTreeFolderType = React.FC<{
+    tree: IFeedTree,
+    folder: IFolder,
+    activeFolderId: number
 }>
 
 const animationDuration = 200;
 
-const SubscriptionLayoutTreeFolder: SubscriptionLayoutTreeFolderType = ({
+const FeedLayoutTreeFolder: FeedLayoutTreeFolderType = ({
     tree,
-    folder
+    folder,
+    activeFolderId
 }) => {
     const [isOpened, setIsOpened] = useState(folder.isOpened);
     const childrenContainer = useRef<HTMLUListElement>(document.createElement('ul'));
-    const folderDepth = SubscriptionTree.getFolderDepth(folder);
+    const folderDepth = FeedTree.getFolderDepth(folder);
 
     const folderMutation = useMutateFolder();
 
     return (
         <li className={classNames('ant-menu-submenu', 'ant-menu-submenu-inline', {
             'ant-menu-submenu-open': isOpened,
-            'ant-menu-submenu-active': false, //TODO: active
         })}>
             <div
-                className="ant-menu-submenu-title"
+                className={classNames('ant-menu-submenu-title', {
+                    'ant-menu-submenu-active': folder.id == activeFolderId
+                })}
                 style={{paddingLeft: (folderDepth * 12) + 'px'}}
                 onClick={e => {
                     setIsOpened(!isOpened);
@@ -41,14 +43,13 @@ const SubscriptionLayoutTreeFolder: SubscriptionLayoutTreeFolderType = ({
                     });
                 }}
             >
-                <span
-                    className="ant-menu-title-content"
+                <NavLink
+                    to={'/folder/' + folder.id}
                     onClick={e => {
                         e.stopPropagation();
-                        console.log('body click');
-                        console.log(folder);
                     }}
-                >{folder.title}</span>
+                    className="ant-menu-title-content"
+                >{folder.title}</NavLink>
                 <i className="ant-menu-submenu-arrow" />
             </div>
 
@@ -82,11 +83,12 @@ const SubscriptionLayoutTreeFolder: SubscriptionLayoutTreeFolderType = ({
                             className={classNames('ant-menu', 'ant-menu-sub', 'ant-menu-inline', state)}
                             style={styleList}
                         >
-                            {SubscriptionTree.getFolderSubFolders(folder).map(item => (
-                                <SubscriptionLayoutTreeFolder
+                            {FeedTree.getFolderSubFolders(folder).map(item => (
+                                <FeedLayoutTreeFolder
                                     key={'folder_' + item.id}
                                     tree={tree}
                                     folder={item}
+                                    activeFolderId={activeFolderId}
                                 />
                             ))}
                         </ul>
@@ -97,4 +99,4 @@ const SubscriptionLayoutTreeFolder: SubscriptionLayoutTreeFolderType = ({
     );
 };
 
-export default SubscriptionLayoutTreeFolder;
+export default FeedLayoutTreeFolder;

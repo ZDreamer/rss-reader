@@ -3,14 +3,14 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
-use App\Repository\SubscriptionRepository;
+use App\Repository\FeedRepository;
 use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
-#[ORM\Entity(repositoryClass: SubscriptionRepository::class)]
+#[ORM\Entity(repositoryClass: FeedRepository::class)]
 #[ORM\HasLifecycleCallbacks]
 #[ApiResource(
     collectionOperations: [
@@ -26,7 +26,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     ]
 )]
 //cascade: ["persist", "remove"]
-class Subscription
+class Feed
 {
     public function __construct()
     {
@@ -40,12 +40,10 @@ class Subscription
 
     #[ORM\Column(type: 'string', length: 1024)]
     #[Assert\NotBlank]
-    #[Groups(["save"])]
     private ?string $title;
 
     #[ORM\Column(type: 'text')]
     #[Assert\NotBlank]
-    #[Groups(["create"])]
     private ?string $url;
 
     #[ORM\Column(type: 'datetime')]
@@ -58,7 +56,7 @@ class Subscription
     #[ORM\JoinColumn(nullable: false)]
     private $owner;
 
-    #[ORM\OneToMany(mappedBy: 'subscription', targetEntity: SubscriptionFolder::class)]
+    #[ORM\OneToMany(mappedBy: 'feed', targetEntity: FeedFolder::class)]
     private $folders;
 
     public function getId(): ?int

@@ -2,10 +2,10 @@
 namespace App\DataPersister;
 
 use ApiPlatform\Core\DataPersister\ContextAwareDataPersisterInterface;
-use App\Entity\Subscription;
+use App\Entity\Feed;
 use Doctrine\ORM\EntityManagerInterface;
 
-final class SubscriptionDataPersister implements ContextAwareDataPersisterInterface
+final class FeedDataPersister implements ContextAwareDataPersisterInterface
 {
     private $em;
 
@@ -16,7 +16,7 @@ final class SubscriptionDataPersister implements ContextAwareDataPersisterInterf
 
     public function supports($data, array $context = []): bool
     {
-        return $data instanceof Subscription;
+        return $data instanceof Feed;
     }
 
     public function persist($data, array $context = [])
