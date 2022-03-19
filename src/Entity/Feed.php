@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use App\Dto\FeedInput;
+use App\Dto\FeedInputPost;
 use App\Repository\FeedRepository;
 use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -15,12 +17,14 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiResource(
     collectionOperations: [
         'post' => [
-            'denormalization_context' => ['groups' => ['save', 'create']],
+            'input' => FeedInput::class,
+            'output' => false,
         ],
     ],
     itemOperations: [
         'patch' => [
-            'denormalization_context' => ['groups' => ['save', 'edit']],
+            'input' => FeedInput::class,
+            'output' => false,
         ],
         'delete',
     ]
@@ -30,7 +34,7 @@ class Feed
 {
     public function __construct()
     {
-        $this->tags = new ArrayCollection();
+        $this->feedFolders = new ArrayCollection();
     }
 
     #[ORM\Id]
@@ -56,8 +60,8 @@ class Feed
     #[ORM\JoinColumn(nullable: false)]
     private $owner;
 
-    #[ORM\OneToMany(mappedBy: 'feed', targetEntity: FeedFolder::class)]
-    private $folders;
+    #[ORM\OneToMany(mappedBy: 'feed', targetEntity: FeedFolder::class, cascade: ["persist", "remove"])]
+    private $feedFolders;
 
     public function getId(): ?int
     {
@@ -81,6 +85,29 @@ class Feed
     {
         $this->owner = $owner;
 
+        return $this;
+    }
+
+    public function setTitle(string $title): self
+    {
+        $this->title = $title;
+
+        return $this;
+    }
+
+    public function setUrl(string $url): self
+    {
+        $this->url = $url;
+
+        return $this;
+    }
+
+    public function addFeedFolder(FeedFolder $feedFolder): self
+    {
+        if (!$this->feedFolders->contains($feedFolder)) {
+            $this->feedFolders[] = $feedFolder;
+            $feedFolder->setFeed($this);
+        }
         return $this;
     }
 }

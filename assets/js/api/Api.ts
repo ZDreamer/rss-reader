@@ -7,7 +7,7 @@ const client = (() => {
 })();
 
 const request = async function<Type>(
-    method: "GET" | "POST" | "PATCH",
+    method: "GET" | "POST" | "PATCH" | "DELETE",
     url: string,
     data: unknown = {}
 ): Promise<Type> {
@@ -41,6 +41,10 @@ const Api = {
 
     patch: async function<Type>(url: string, data: unknown): Promise<Type> {
         return await request('PATCH', url, data);
+    },
+
+    remove: async function<Type>(url: string): Promise<Type> {
+        return await request('DELETE', url);
     }
 };
 

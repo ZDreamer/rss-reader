@@ -1,16 +1,20 @@
 import axios from "axios";
-
-export interface IFeedFolder {
-    id?: number,
-    title?: string
-}
+import {IFolder, IFolderNew, IFolderPatch} from "./ApiFolder";
+import Api from "./Api";
 
 export interface IFeed {
-    id?: number,
+    id: number,
     title: string
     url: string,
-    tags: IFeedFolder[]
+    folders: number[]
 }
+
+export interface IFeedNew {
+    url: string,
+    folders: number[]
+}
+
+export type IFeedPatch = Partial<IFeed> & {id: number}
 
 export default class ApiFeed {
     static defaultValue = {
@@ -19,7 +23,18 @@ export default class ApiFeed {
         tags: []
     }
 
-    static async save(feed: IFeed) {
-        return await axios.post('/api/feeds', feed);
+    static async create(feed: IFeedNew) {
+        const postData = { ...feed } as Partial<IFeed>;
+        delete postData.id;
+
+        return await Api.post('/feeds', postData);
+    }
+
+    static async modify(feed: IFeedPatch) {
+        return await Api.patch(`/feeds/${feed.id}`, feed);
+    }
+
+    static async remove(id: number) {
+        return await Api.remove(`/feeds/${id}`);
     }
 }

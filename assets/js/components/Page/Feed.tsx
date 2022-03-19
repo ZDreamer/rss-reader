@@ -1,10 +1,12 @@
 import React from 'react';
 import useFeedTree from "../../hooks/useFeedTree";
 import useParamsFolderId from "../../hooks/useParamsFolderId";
+import useParamsFeedId from "../../hooks/useParamsFeedId";
 
-const PageFolder: React.FC = () => {
+const PageFeed: React.FC = () => {
     const {data: tree} = useFeedTree();
     const folderId = useParamsFolderId();
+    const feedId = useParamsFeedId();
 
     if (!tree) {
         return <div>Loading</div>;
@@ -12,9 +14,9 @@ const PageFolder: React.FC = () => {
 
     return (
         <div>
-            Folder <b>{folderId}</b> page!
+            Feed <b>{feedId}</b> in folder <b>{folderId}</b> page!
         </div>
     );
 };
 
-export default PageFolder;
+export default PageFeed;

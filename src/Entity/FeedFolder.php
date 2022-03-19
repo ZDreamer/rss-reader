@@ -41,4 +41,21 @@ class FeedFolder
     {
         $this->updatedAt = new \DateTime();
     }
+
+    public function getFeed(): ?Feed
+    {
+        return $this->feed;
+    }
+
+    public function setFeed(?Feed $feed): self
+    {
+        $this->feed = $feed;
+        return $this;
+    }
+
+    public function setFolder(?Folder $folder): self
+    {
+        $this->folder = $folder;
+        return $this;
+    }
 }

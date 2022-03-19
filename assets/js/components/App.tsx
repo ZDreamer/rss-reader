@@ -9,6 +9,7 @@ import LoginPage from "../pages/LoginPage";
 import {QueryClient, QueryClientProvider} from "react-query";
 import {ReactQueryDevtools} from "react-query/devtools";
 import PageFolder from "./Page/Folder";
+import PageFeed from "./Page/Feed";
 
 const queryClient = new QueryClient({
     defaultOptions: {
@@ -29,6 +30,8 @@ const App: FC = () => {
 
                         {/*TODO: Сделать красивые ссылки*/}
                         <Route path="folder/:folderId" element={<PageFolder/>} />
+
+                        <Route path="folder/:folderId/feed/:feedId" element={<PageFeed/>} />
 
                         <Route path="login" element={<LoginPage />} />
 

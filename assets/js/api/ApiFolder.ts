@@ -9,6 +9,12 @@ export interface IFolder {
     isOpened: boolean,
 }
 
+export interface IFeedFolder {
+    id: number,
+    feed_id: number,
+    folder_id: number
+}
+
 export interface IFolderNew {
     title: string,
     parent: number
@@ -18,7 +24,8 @@ export type IFolderPatch = Partial<IFolder> & {id: number}
 
 export interface IFeedTree {
     feeds: IFeed[],
-    folders: IFolder[]
+    folders: IFolder[],
+    feedFolders: IFeedFolder[]
 }
 
 export default class ApiFolder {
@@ -31,6 +38,10 @@ export default class ApiFolder {
 
     static async modify(folder: IFolderPatch) {
         return await Api.patch(`/folders/${folder.id}`, folder);
+    }
+
+    static async remove(id: number) {
+        return await Api.remove(`/folders/${id}`);
     }
 
     static async getTree(context: QueryFunctionContext) {

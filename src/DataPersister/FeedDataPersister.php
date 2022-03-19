@@ -2,18 +2,11 @@
 namespace App\DataPersister;
 
 use ApiPlatform\Core\DataPersister\ContextAwareDataPersisterInterface;
+use App\BaseApiService;
 use App\Entity\Feed;
-use Doctrine\ORM\EntityManagerInterface;
 
-final class FeedDataPersister implements ContextAwareDataPersisterInterface
+final class FeedDataPersister extends BaseApiService implements ContextAwareDataPersisterInterface
 {
-    private $em;
-
-    public function __construct(EntityManagerInterface $entityManager)
-    {
-        $this->em = $entityManager;
-    }
-
     public function supports($data, array $context = []): bool
     {
         return $data instanceof Feed;

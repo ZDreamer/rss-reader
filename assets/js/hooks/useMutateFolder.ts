@@ -8,21 +8,30 @@ type IMutateFolderProps = {
 }
 
 type IMutateFolderMutateProps = {
-    folder: IFolderNew | IFolderPatch
+    action: 'create',
+    folder: IFolderNew
+} | {
+    action: 'update',
+    folder: IFolderPatch
+} | {
+    action: 'remove',
+    id: number
 }
 
 function useMutateFolder(o?: IMutateFolderProps) {
     const queryClient = useQueryClient()
 
-    return useMutation(({ folder }: IMutateFolderMutateProps) => {
-        if ('id' in folder) {
-            return ApiFolder.modify(folder);
-        } else {
-            return ApiFolder.create(folder);
+    return useMutation((data: IMutateFolderMutateProps) => {
+        if (data.action == 'create') {
+            return ApiFolder.create(data.folder);
+        } else if (data.action == 'update') {
+            return ApiFolder.modify(data.folder);
+        } else { //remove
+            return ApiFolder.remove(data.id);
         }
     }, {
-        onMutate: async ({ folder }: IMutateFolderMutateProps) => {
-            if ('id' in folder) {
+        onMutate: async (data: IMutateFolderMutateProps) => {
+            if (data.action == 'update') {
                 // Cancel any outgoing refetches (so they don't overwrite our optimistic update)
                 await queryClient.cancelQueries(['feedTree']);
 
@@ -31,7 +40,7 @@ function useMutateFolder(o?: IMutateFolderProps) {
                 if (previousTree) {
                     queryClient.setQueryData<IFeedTree>(
                         ['feedTree'],
-                        FeedTree.getTreeWithUpdatedFolder(previousTree, folder)
+                        FeedTree.getTreeWithUpdatedFolder(previousTree, data.folder)
                     );
                 }
 

@@ -1,20 +1,20 @@
 import React, {useState} from 'react';
-import {Button, Dropdown, Menu} from "antd";
-import {CloseSquareOutlined, DownOutlined, EditOutlined, FolderOutlined} from '@ant-design/icons';
 import useFeedTree from "../../hooks/useFeedTree";
-import EditForm from "./EditForm";
 import {useNavigate} from "react-router-dom";
-import useMutateFolder from "../../hooks/useMutateFolder";
+import useMutateFeed from "../../hooks/useMutateFeed";
+import {Button, Dropdown, Menu} from "antd";
+import {CloseSquareOutlined, DownOutlined, EditOutlined, FolderOutlined} from "@ant-design/icons";
+import EditForm from "../Feed/EditForm";
 
-export type FolderMenuType = React.FC<{
-    folderId: number
+export type FeedMenuType = React.FC<{
+    feedId: number
 }>
 
-const FolderMenu: FolderMenuType = ({ folderId}) => {
+const FeedMenu: FeedMenuType = ({ feedId }) => {
     const [isEditFormVisible, setIsEditFormVisible] = useState<boolean>(false);
     const {data: tree} = useFeedTree();
     const navigate = useNavigate();
-    const folderMutation = useMutateFolder({
+    const feedMutation = useMutateFeed({
         onSuccess: () => {
             navigate("/");
         }
@@ -25,7 +25,7 @@ const FolderMenu: FolderMenuType = ({ folderId}) => {
             if (o.key == 'edit') {
                 setIsEditFormVisible(true)
             } else if (o.key == 'remove') {
-                folderMutation.mutate({ action: 'remove', id: folderId })
+                feedMutation.mutate({ action: 'remove', id: feedId })
             }
         }}>
             <Menu.Item key="edit" icon={<EditOutlined />}>
@@ -45,14 +45,14 @@ const FolderMenu: FolderMenuType = ({ folderId}) => {
                 trigger={['click']}
             >
                 <Button>
-                    <FolderOutlined /> Folder <DownOutlined/>
+                    <FolderOutlined /> Feed <DownOutlined/>
                 </Button>
             </Dropdown>
 
             {tree ? (
                 <EditForm
                     tree={tree}
-                    folderId={folderId}
+                    feedId={feedId}
                     isModalVisible={isEditFormVisible}
                     setIsModalVisible={setIsEditFormVisible}
                 />
@@ -61,4 +61,4 @@ const FolderMenu: FolderMenuType = ({ folderId}) => {
     );
 };
 
-export default FolderMenu;
+export default FeedMenu;

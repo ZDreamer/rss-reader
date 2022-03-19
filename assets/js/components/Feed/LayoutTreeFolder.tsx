@@ -5,11 +5,13 @@ import classNames from "classnames";
 import {Transition} from "react-transition-group";
 import useMutateFolder from "../../hooks/useMutateFolder";
 import {NavLink} from "react-router-dom";
+import FeedLayoutTreeFeed from "./LayoutTreeFeed";
 
 export type FeedLayoutTreeFolderType = React.FC<{
     tree: IFeedTree,
     folder: IFolder,
-    activeFolderId: number
+    activeFolderId: number,
+    activeFeedId: number
 }>
 
 const animationDuration = 200;
@@ -17,7 +19,8 @@ const animationDuration = 200;
 const FeedLayoutTreeFolder: FeedLayoutTreeFolderType = ({
     tree,
     folder,
-    activeFolderId
+    activeFolderId,
+    activeFeedId
 }) => {
     const [isOpened, setIsOpened] = useState(folder.isOpened);
     const childrenContainer = useRef<HTMLUListElement>(document.createElement('ul'));
@@ -39,6 +42,7 @@ const FeedLayoutTreeFolder: FeedLayoutTreeFolderType = ({
                     window.getSelection()?.removeAllRanges();
 
                     folderMutation.mutate({
+                        action: 'update',
                         folder: {id: folder.id, isOpened: !isOpened}
                     });
                 }}
@@ -89,6 +93,18 @@ const FeedLayoutTreeFolder: FeedLayoutTreeFolderType = ({
                                     tree={tree}
                                     folder={item}
                                     activeFolderId={activeFolderId}
+                                    activeFeedId={activeFeedId}
+                                />
+                            ))}
+
+                            {FeedTree.getFolderFeeds(folder).map(feed => (
+                                <FeedLayoutTreeFeed
+                                    key={'folder_' + folder.id + '_feed_' + feed.id}
+                                    tree={tree}
+                                    folder={folder}
+                                    feed={feed}
+                                    activeFolderId={activeFolderId}
+                                    activeFeedId={activeFeedId}
                                 />
                             ))}
                         </ul>

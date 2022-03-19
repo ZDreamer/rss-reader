@@ -3,7 +3,7 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
-use App\Dto\FolderInputPatch;
+use App\Dto\FolderInput;
 use App\Dto\FolderInputPost;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -17,13 +17,13 @@ use Symfony\Component\Validator\Constraints as Assert;
             'path' => '/folders/get_tree',
         ],
         'post' => [
-            'input' => FolderInputPost::class,
+            'input' => FolderInput::class,
             'output' => false,
         ],
     ],
     itemOperations: [
         'patch' => [
-            'input' => FolderInputPatch::class,
+            'input' => FolderInput::class,
             'output' => false,
         ],
         'delete',
@@ -57,7 +57,7 @@ class Folder
         type: 'boolean',
         options: ['default' => true]
     )]
-    private $isOpened = true;
+    private bool $isOpened = true;
 
     #[ORM\PrePersist]
     public function setCreatedAtValue()

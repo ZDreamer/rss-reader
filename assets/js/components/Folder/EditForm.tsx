@@ -1,6 +1,6 @@
 import React from 'react';
 import {Form, Input, Modal} from 'antd';
-import {IFolderNew, IFeedTree} from "../../api/ApiFolder";
+import {IFolderNew, IFeedTree, IFolderPatch} from "../../api/ApiFolder";
 import FeedTree from "../../utils/FeedTree";
 import MutationErrors from "../MutationErrors";
 import FolderTreeSelect from "./TreeSelect";
@@ -26,19 +26,23 @@ const FolderEditForm: FolderEditFormType = ({
         }
     });
 
-    const editFolder = async function (folder: IFolderNew) {
-        mutation.mutate({
-            folder: folder
-        });
+    const editFolder = async function (folder: IFolderNew | IFolderPatch) {
+        if ('id' in folder) {
+            mutation.mutate({
+                action: 'update',
+                folder: folder
+            });
+        } else {
+            mutation.mutate({
+                action: 'create',
+                folder: folder
+            });
+        }
     }
 
     let modalBody;
     if (tree) {
-        const folder = folderId ?
-            FeedTree.getFolder(folderId)
-        :   FeedTree.getNewFolder();
-
-        console.log(folder);
+        const folder = FeedTree.getFolder(folderId);
 
         modalBody = (
             <Form
@@ -51,6 +55,12 @@ const FolderEditForm: FolderEditFormType = ({
                         <MutationErrors errorObject={mutation.error} />
                     </Form.Item>
                 )}
+
+                { folder.id ? (
+                    <Form.Item name="id" style={{display: 'none'}}>
+                        <Input />
+                    </Form.Item>
+                ) : ''}
 
                 <Form.Item
                     label="Title"
@@ -68,6 +78,7 @@ const FolderEditForm: FolderEditFormType = ({
                 <Form.Item
                     label="Parent"
                     name="parent"
+                    style={folder.parent ? {} : {display: 'none'}}
                 >
                     <FolderTreeSelect tree={tree} />
                 </Form.Item>
@@ -79,8 +90,8 @@ const FolderEditForm: FolderEditFormType = ({
 
     return (
         <Modal
-            title="Adding folder"
-            okText="Add"
+            title={folderId ? "Editing folder" : "Adding folder"}
+            okText={folderId ? "Save" : "Add"}
             visible={isModalVisible}
 
             onOk={() => {

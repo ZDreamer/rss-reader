@@ -2,18 +2,11 @@
 namespace App\DataPersister;
 
 use ApiPlatform\Core\DataPersister\ContextAwareDataPersisterInterface;
+use App\BaseApiService;
 use App\Entity\Folder;
-use Doctrine\ORM\EntityManagerInterface;
 
-final class FolderDataPersister implements ContextAwareDataPersisterInterface
+final class FolderDataPersister extends BaseApiService implements ContextAwareDataPersisterInterface
 {
-    private $em;
-
-    public function __construct(EntityManagerInterface $entityManager)
-    {
-        $this->em = $entityManager;
-    }
-
     public function supports($data, array $context = []): bool
     {
         return $data instanceof Folder;

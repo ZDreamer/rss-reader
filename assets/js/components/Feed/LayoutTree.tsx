@@ -3,10 +3,12 @@ import useFeedTree from "../../hooks/useFeedTree";
 import FeedTree from "../../utils/FeedTree";
 import LayoutTreeFolder from "./LayoutTreeFolder";
 import useParamsFolderId from "../../hooks/useParamsFolderId";
+import useParamsFeedId from "../../hooks/useParamsFeedId";
 
 const FeedLayoutTree: React.FC = () => {
     const {data: tree, error} = useFeedTree();
     const activeFolderId = useParamsFolderId();
+    const activeFeedId = useParamsFeedId();
 
     if (tree) {
         const rootFolder = FeedTree.getRootFolder();
@@ -17,6 +19,7 @@ const FeedLayoutTree: React.FC = () => {
                     tree={tree}
                     folder={rootFolder}
                     activeFolderId={activeFolderId}
+                    activeFeedId={activeFeedId}
                 />
             </ul>
         );

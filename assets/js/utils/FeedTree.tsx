@@ -1,19 +1,42 @@
 import {IFolder, IFeedTree} from "../api/ApiFolder";
+import {IFeed} from "../api/ApiFeed";
 
 class FeedTreeClass  {
-    folderIndex: undefined | IFolder[];
+    folderIndex: {
+        [index: number]: IFolder;
+    } = {};
+
+    feedIndex: {
+        [index: number]: {
+            [index: number]: number;
+        };
+    } = {};
 
     tree: undefined | IFeedTree;
 
     setTree(tree: IFeedTree) {
         this.tree = tree;
 
-        const folderIndex: IFolder[] = [];
+        this.folderIndex = {};
         this.tree.folders.map(folder => {
-            folderIndex[folder.id] = folder;
+            this.folderIndex[folder.id] = folder;
         });
 
-        this.folderIndex = folderIndex;
+        const feedMap : { [index: number]: number } = {};
+        this.tree.feeds.map((feed, index) => {
+            feed.folders = [];
+            feedMap[feed.id] = index;
+        });
+
+        this.feedIndex = {};
+        this.tree.feedFolders.map(item => {
+            this.feedIndex[item.folder_id] = this.feedIndex[item.folder_id] || {};
+            this.feedIndex[item.folder_id][item.feed_id] = item.feed_id;
+
+            if (this.tree) {
+                this.tree.feeds[feedMap[item.feed_id]].folders.push(item.folder_id);
+            }
+        });
     }
 
     assertTree(): asserts this is {tree: IFeedTree, folderIndex: IFolder[]} & this {
@@ -22,19 +45,34 @@ class FeedTreeClass  {
         }
     }
 
-    getNewFolder() : IFolder {
-        return {
-            id: 0,
-            title: '',
-            parent: this.getRootFolder().id,
-            isOpened: true,
-        };
-    }
-
     getFolder(folderId: number) : IFolder {
         this.assertTree();
 
-        return this.tree.folders.filter(item => item.id === folderId)[0];
+        if (folderId) {
+            return this.tree.folders.filter(item => item.id === folderId)[0];
+        } else {
+            return {
+                id: 0,
+                title: '',
+                parent: this.getRootFolder().id,
+                isOpened: true,
+            };
+        }
+    }
+
+    getFeed(feedId: number) : IFeed {
+        this.assertTree();
+
+        if (feedId) {
+            return this.tree.feeds.filter(item => item.id === feedId)[0];
+        } else {
+            return {
+                id: 0,
+                title: '',
+                url: '',
+                folders: [this.getRootFolder().id]
+            };
+        }
     }
 
     getOpenedFolders(): number[] {
@@ -70,6 +108,14 @@ class FeedTreeClass  {
         return depth;
     }
 
+    getFolderFeeds (folder: IFolder): IFeed[] {
+        this.assertTree();
+
+        const feedIndex = this.feedIndex;
+
+        return this.tree.feeds.filter(item => feedIndex[folder.id] && feedIndex[folder.id][item.id]);
+    }
+
     getTreeWithUpdatedFolder(originalTree: IFeedTree, folderToUpdate: Partial<IFolder>): IFeedTree {
         const tree = JSON.parse(JSON.stringify(originalTree));
 
@@ -78,6 +124,20 @@ class FeedTreeClass  {
 
             if (folder.id === folderToUpdate.id) {
                 tree.folders[i] = {...folder, ...folderToUpdate};
+            }
+        }
+
+        return tree;
+    }
+
+    getTreeWithUpdatedFeed(originalTree: IFeedTree, feedToUpdate: Partial<IFeed>): IFeedTree {
+        const tree = JSON.parse(JSON.stringify(originalTree));
+
+        for (const i in tree.feeds) {
+            const feed = tree.feeds[i];
+
+            if (feed.id === feedToUpdate.id) {
+                tree.feeds[i] = {...feed, ...feedToUpdate};
             }
         }
 

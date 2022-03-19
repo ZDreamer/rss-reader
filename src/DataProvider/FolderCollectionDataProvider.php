@@ -3,18 +3,11 @@ namespace App\DataProvider;
 
 use ApiPlatform\Core\DataProvider\ContextAwareCollectionDataProviderInterface;
 use ApiPlatform\Core\DataProvider\RestrictedDataProviderInterface;
+use App\BaseApiService;
 use App\Entity\Folder;
-use App\Entity\Feed;
-use Doctrine\ORM\EntityManagerInterface;
 
-final class FolderCollectionDataProvider implements ContextAwareCollectionDataProviderInterface, RestrictedDataProviderInterface
+final class FolderCollectionDataProvider extends BaseApiService implements ContextAwareCollectionDataProviderInterface, RestrictedDataProviderInterface
 {
-    private $em;
-    public function __construct(EntityManagerInterface $entityManager)
-    {
-        $this->em = $entityManager;
-    }
-
     public function supports(string $resourceClass, string $operationName = null, array $context = []): bool
     {
         return Folder::class === $resourceClass;
@@ -54,9 +47,20 @@ final class FolderCollectionDataProvider implements ContextAwareCollectionDataPr
             ORDER BY f.id ASC
         ")->setParameters(['user_id' => $userId])->getArrayResult(); //TODO: сортировку через интерфейс
 
+        $feedFolders = $this->em->createQuery("
+            SELECT
+                ff.id,
+                COALESCE(IDENTITY(ff.feed), 0) AS feed_id,
+                COALESCE(IDENTITY(ff.folder), 0) AS folder_id
+            FROM App\Entity\Feed f
+            JOIN f.feedFolders ff
+            WHERE f.owner = :user_id
+        ")->setParameters(['user_id' => $userId])->getArrayResult();
+
         return [
             'feeds' => $feeds,
             'folders' => $folders,
+            'feedFolders' => $feedFolders,
         ];
     }
 }

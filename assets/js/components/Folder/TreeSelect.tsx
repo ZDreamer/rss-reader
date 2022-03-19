@@ -9,12 +9,14 @@ const { TreeNode } = TreeSelect;
 export type FolderTreeSelectType = React.FC<{
     tree: IFeedTree,
     value?: number,
+    multiple?: boolean,
     onChange?(value: number): void
 }>
 
 const FolderTreeSelect: FolderTreeSelectType = ({
     tree,
     onChange,
+    multiple = false,
     value
 }) => {
     const onChangeHandler = (value: number) => {
@@ -33,13 +35,14 @@ const FolderTreeSelect: FolderTreeSelectType = ({
 
     return (
         <TreeSelect
-            showSearch
+            showSearch={true}
             style={{ width: '100%' }}
             value={value}
             dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
             placeholder="Parent folder"
             allowClear={false}
-            treeDefaultExpandAll
+            treeDefaultExpandAll={true}
+            multiple={multiple}
             onChange={onChangeHandler}
         >
             {getTreeNodeTree(

@@ -2,7 +2,7 @@
 
 namespace App\Dto;
 
-class FolderInputPatch
+class FolderInput
 {
     public ?string $title = null;
 

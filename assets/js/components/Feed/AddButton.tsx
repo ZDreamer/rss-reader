@@ -1,38 +1,34 @@
 import React, {useState} from 'react';
-import ApiFeed, {IFeed} from "../../api/ApiFeed";
 import {Button} from "antd";
-import AddForm from "./AddForm";
-import {useMutation, useQueryClient} from "react-query";
-import { AppstoreAddOutlined } from '@ant-design/icons';
+import {AppstoreAddOutlined} from '@ant-design/icons';
+import useFeedTree from "../../hooks/useFeedTree";
+import EditForm from "./EditForm";
 
 const FeedAddButton: React.FC = () => {
-    const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
-    const queryClient = useQueryClient();
-    const addNewFeedMutation = useMutation((feed: IFeed) => {
-        return ApiFeed.save(feed);
-    }, {
-        onSuccess: (data, variables, context) => {
-            queryClient.invalidateQueries(['feedTree']);
-        }
-    });
-
-    const onAddNewFeed = async function (feed: IFeed) {
-        addNewFeedMutation.mutate(feed);
-    };
+    const [isClicked, setIsClicked] = useState<boolean>(false);
+    const [isEditFormVisible, setIsEditFormVisible] = useState<boolean>(false);
+    const {data: tree} = useFeedTree();
 
     return (
         <div>
-            <Button onClick={(e) => {
-                e.preventDefault();
+            <Button
+                loading={isClicked && !tree}
+                onClick={(e) => {
+                    e.preventDefault();
 
-                setIsModalVisible(true);
-            }}><AppstoreAddOutlined /> Add feed</Button>
+                    setIsClicked(true);
+                    setIsEditFormVisible(true);
+                }}
+            ><AppstoreAddOutlined /> Add feed</Button>
 
-            <AddForm
-                onAddNewFeed={onAddNewFeed}
-                isModalVisible={isModalVisible}
-                setIsModalVisible={setIsModalVisible}
-            />
+            {tree ? (
+                <EditForm
+                    tree={tree}
+                    feedId={0}
+                    isModalVisible={isEditFormVisible}
+                    setIsModalVisible={setIsEditFormVisible}
+                />
+            ) : ''}
         </div>
     );
 };
