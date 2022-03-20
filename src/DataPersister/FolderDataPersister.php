@@ -20,6 +20,19 @@ final class FolderDataPersister extends BaseApiService implements ContextAwareDa
 
     public function remove($data, array $context = [])
     {
+        dump($data);
+
+        //todo: Rearrange FeedFolders for feeds in this folder
+
+        $feedFolders = $this->em->createQuery("
+            SELECT
+                ff.id,
+                COALESCE(IDENTITY(ff.folder), 0) AS folder_id,
+                COALESCE(IDENTITY(ff.feed), 0) AS feed_id
+            FROM App\Entity\FeedFolder ff
+            WHERE ff.owner = :owner_id
+        ")->setParameters(['owner_id' => $data->owner])->getArrayResult();
+
         $this->em->remove($data);
         $this->em->flush();
     }
