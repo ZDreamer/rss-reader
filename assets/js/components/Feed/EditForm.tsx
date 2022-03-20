@@ -46,11 +46,12 @@ const FeedEditForm: FeedEditFormType = ({
     if (tree) {
         const feed = FeedTree.getFeed(feedId);
 
-        modalBody = ( //TODO: Align fields и labels in the form
+        modalBody = (
             <Form
                 form={form}
                 onFinish={editFeed}
                 initialValues={feed}
+                labelCol={{span: 4}}
             >
                 {mutation.error && (
                     <Form.Item>

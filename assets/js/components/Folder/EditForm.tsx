@@ -49,6 +49,7 @@ const FolderEditForm: FolderEditFormType = ({
                 form={form}
                 onFinish={editFolder}
                 initialValues={folder}
+                labelCol={{span: 4}}
             >
                 {mutation.error && (
                     <Form.Item>

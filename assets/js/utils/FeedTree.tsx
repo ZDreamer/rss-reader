@@ -60,8 +60,12 @@ class FeedTreeClass  {
         }
     }
 
-    getFeed(feedId: number) : IFeed {
+    getFeed(feedId: number | string) : IFeed {
         this.assertTree();
+
+        if (typeof feedId == 'string') {
+            feedId = parseInt(feedId);
+        }
 
         if (feedId) {
             return this.tree.feeds.filter(item => item.id === feedId)[0];

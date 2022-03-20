@@ -65,7 +65,6 @@ function useMutateFeed(o?: IMutateFeedProps) {
 
         onSuccess: (data, variables, context) => {
             if (context.invalidate) {
-                //TODO: Если мы удаляем фид из папки, находясь в нём, надо кидать на главную
                 queryClient.invalidateQueries(['feedTree']);
             }
 

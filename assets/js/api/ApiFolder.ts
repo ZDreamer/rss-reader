@@ -25,7 +25,8 @@ export type IFolderPatch = Partial<IFolder> & {id: number}
 export interface IFeedTree {
     feeds: IFeed[],
     folders: IFolder[],
-    feedFolders: IFeedFolder[]
+    feedFolders: IFeedFolder[],
+    isProcessedAfterLoad: boolean | undefined
 }
 
 export default class ApiFolder {
