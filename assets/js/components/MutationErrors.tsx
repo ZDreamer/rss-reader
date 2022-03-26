@@ -3,7 +3,7 @@ import React from 'react';
 export type MutationErrorsType = React.FC<{
     errorObject: any //TODO: Try to find a better way
 }>
-
+//TODO: Добавить стили
 const MutationErrors: MutationErrorsType = ({ errorObject }) => {
     const errorList = [];
     if (errorObject.data && errorObject.data.violations) {

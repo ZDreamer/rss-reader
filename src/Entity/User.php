@@ -16,7 +16,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
     ],
     itemOperations: [
 
-    ]
+    ],
 )]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {

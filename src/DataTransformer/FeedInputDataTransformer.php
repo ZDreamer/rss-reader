@@ -54,9 +54,9 @@ class FeedInputDataTransformer extends BaseApiService implements DataTransformer
             $toRemove = array_diff($newFolderIds, $object->folders);
         }
 
-        dump(['toAdd' => $toAdd, 'toRemove' => $toRemove, '$idIndex' => $idIndex]);
+        //dump(['toAdd' => $toAdd, 'toRemove' => $toRemove, '$idIndex' => $idIndex]);
 
-
+        //TODO: Надо разобраться как в persister такие вещи делать
         foreach ($toAdd as $folderId) {
             $feedFolder = new FeedFolder();
             $folder = $this->em->find(Folder::class, $folderId);

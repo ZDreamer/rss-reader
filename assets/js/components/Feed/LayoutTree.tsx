@@ -4,6 +4,7 @@ import FeedTree from "../../utils/FeedTree";
 import LayoutTreeFolder from "./LayoutTreeFolder";
 import useParamsFolderId from "../../hooks/useParamsFolderId";
 import useParamsFeedId from "../../hooks/useParamsFeedId";
+import MutationErrors from "../MutationErrors";
 
 const FeedLayoutTree: React.FC = () => {
     const {data: tree, error} = useFeedTree();
@@ -26,7 +27,7 @@ const FeedLayoutTree: React.FC = () => {
     }
 
     if (error) {
-        return <span>Error: {error.message}</span>
+        return <MutationErrors errorObject={error} />
     }
 
     return <span>Loading...</span>

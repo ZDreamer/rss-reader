@@ -27,7 +27,10 @@ use Symfony\Component\Validator\Constraints as Assert;
             'output' => false,
         ],
         'delete',
-    ]
+    ],
+    attributes: [
+        "security" => "object.owner == user"
+    ],
 )]
 class Folder
 {
