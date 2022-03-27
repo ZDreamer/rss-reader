@@ -21,7 +21,11 @@ RUN apt-get update && apt-get install libcurl4-openssl-dev
 RUN apt-get update && apt-get install -y \
     php-mbstring \
     php-curl \
-    php-pgsql
+    php-pgsql \
+    php-xml
+
+# Get latest Composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 #Copy SSH Keys
 COPY  ./docker-compose/jetbrains/ssh/authorized_keys /home/jetbrains/.ssh/authorized_keys
