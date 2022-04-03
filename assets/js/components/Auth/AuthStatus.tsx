@@ -13,11 +13,12 @@ const AuthStatus = (): JSX.Element => {
 
     return (
         <div>
-            Welcome {auth.user.name}!{" "}
+            {/*Welcome {auth.user.name}!{" "}*/}
 
             <Button
                 onClick={() => {
-                    auth.signOut(() => navigate("/"));
+                    location.href = '/logout';
+                    // auth.signOut(() => navigate("/"));
                 }}
             >Sign out</Button>
         </div>

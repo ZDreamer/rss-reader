@@ -4,7 +4,7 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use DateTimeInterface;
-
+//TODO: The mappings App\Entity\Feed#feedFolders and App\Entity\FeedFolder#feed are inconsistent with each other.
 #[ORM\Entity()]
 #[ORM\Table(name: '`feed_folder`')]
 #[ORM\HasLifecycleCallbacks]

@@ -23,13 +23,16 @@ use Symfony\Component\Validator\Constraints as Assert;
     ],
     itemOperations: [
         'patch' => [
+            "security" => "object.getOwner() == user",
             'input' => FolderInput::class,
             'output' => false,
         ],
-        'delete',
+        'delete' => [
+            "security" => "object.getOwner() == user",
+        ],
     ],
     attributes: [
-        "security" => "object.owner == user"
+        "security" => "is_granted('ROLE_USER')"
     ],
 )]
 class Folder
@@ -86,6 +89,11 @@ class Folder
         $this->parent = $parent;
 
         return $this;
+    }
+
+    public function getOwner(): User
+    {
+        return $this->owner;
     }
 
     public function setOwner(?User $owner): self

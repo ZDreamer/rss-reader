@@ -6,6 +6,7 @@ use ApiPlatform\Core\DataTransformer\DataTransformerInterface;
 use App\BaseApiService;
 use App\Dto\FolderInput;
 use App\Entity\Folder;
+use App\Entity\User;
 
 class FolderInputDataTransformer extends BaseApiService implements DataTransformerInterface
 {
@@ -13,6 +14,9 @@ class FolderInputDataTransformer extends BaseApiService implements DataTransform
     {
         if ($context['operation_type'] === 'collection' && $context['collection_operation_name'] === 'post') {
             $folder = new Folder();
+            $folder->setOwner(
+                $this->em->find(User::class, $this->userId)
+            );
         } else {
             $folder = $context['object_to_populate'];
         }
@@ -25,9 +29,15 @@ class FolderInputDataTransformer extends BaseApiService implements DataTransform
             $folder->setIsOpened($object->isOpened);
         }
 
-        $folder->setParent(
-            $this->em->find(Folder::class, $object->parent)
-        );
+        if (!$object->parent) {
+            throw new \Exception('Folder must have a parent');
+        }
+        $parentFolder = $this->em->find(Folder::class, $object->parent);
+        if ($parentFolder->getOwner()->getId() != $this->userId) {
+            throw new \Exception('Parent folder must not belong to other user');
+        }
+
+        $folder->setParent($parentFolder);
 
         return $folder;
     }

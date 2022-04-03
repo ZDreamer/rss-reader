@@ -45,8 +45,12 @@ class FeedTreeClass  {
         }
     }
 
-    getFolder(folderId: number) : IFolder {
+    getFolder(folderId: number | string) : IFolder {
         this.assertTree();
+
+        if (typeof folderId == 'string') {
+            folderId = parseInt(folderId);
+        }
 
         if (folderId) {
             return this.tree.folders.filter(item => item.id === folderId)[0];
@@ -74,7 +78,7 @@ class FeedTreeClass  {
                 id: 0,
                 title: '',
                 url: '',
-                folders: [this.getRootFolder().id]
+                folders: [this.getRootFolder().id] //TODO: Если открыта страница папки то ставить её сюда
             };
         }
     }

@@ -23,13 +23,16 @@ use Symfony\Component\Validator\Constraints as Assert;
     ],
     itemOperations: [
         'patch' => [
+            "security" => "object.getOwner() == user",
             'input' => FeedInput::class,
             'output' => false,
         ],
-        'delete',
+        'delete' => [
+            "security" => "object.getOwner() == user",
+        ],
     ],
     attributes: [
-        "security" => "object.owner == user"
+        "security" => "is_granted('ROLE_USER')"
     ],
 )]
 //cascade: ["persist", "remove"]
@@ -82,6 +85,11 @@ class Feed
     public function setUpdatedAtValue()
     {
         $this->updatedAt = new \DateTime();
+    }
+
+    public function getOwner(): User
+    {
+        return $this->owner;
     }
 
     public function setOwner(?User $owner): self

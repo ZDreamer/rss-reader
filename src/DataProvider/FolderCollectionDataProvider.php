@@ -24,8 +24,6 @@ final class FolderCollectionDataProvider extends BaseApiService implements Conte
 
     private function getTree()
     {
-        $userId = 1; //TODO: Тут надо брать реального пользователя
-
         $feeds = $this->em->createQuery("
             SELECT
                 s.id,
@@ -34,7 +32,7 @@ final class FolderCollectionDataProvider extends BaseApiService implements Conte
             FROM App\Entity\Feed s
             WHERE s.owner = :user_id
             ORDER BY s.id ASC
-        ")->setParameters(['user_id' => $userId])->getArrayResult();
+        ")->setParameters(['user_id' => $this->userId])->getArrayResult();
 
         $folders = $this->em->createQuery("
             SELECT
@@ -45,7 +43,7 @@ final class FolderCollectionDataProvider extends BaseApiService implements Conte
             FROM App\Entity\Folder f
             WHERE f.owner = :user_id
             ORDER BY f.id ASC
-        ")->setParameters(['user_id' => $userId])->getArrayResult(); //TODO: сортировку через интерфейс
+        ")->setParameters(['user_id' => $this->userId])->getArrayResult(); //TODO: сортировку через интерфейс
 
         $feedFolders = $this->em->createQuery("
             SELECT
@@ -55,7 +53,7 @@ final class FolderCollectionDataProvider extends BaseApiService implements Conte
             FROM App\Entity\Feed f
             JOIN f.feedFolders ff
             WHERE f.owner = :user_id
-        ")->setParameters(['user_id' => $userId])->getArrayResult();
+        ")->setParameters(['user_id' => $this->userId])->getArrayResult();
 
         return [
             'feeds' => $feeds,

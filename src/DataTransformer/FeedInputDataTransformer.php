@@ -8,6 +8,7 @@ use App\Dto\FeedInput;
 use App\Entity\Feed;
 use App\Entity\FeedFolder;
 use App\Entity\Folder;
+use App\Entity\User;
 
 class FeedInputDataTransformer extends BaseApiService implements DataTransformerInterface
 {
@@ -15,6 +16,9 @@ class FeedInputDataTransformer extends BaseApiService implements DataTransformer
     {
         if ($context['operation_type'] === 'collection' && $context['collection_operation_name'] === 'post') {
             $feed = new Feed();
+            $feed->setOwner(
+                $this->em->find(User::class, $this->userId)
+            );
         } else {
             $feed = $context['object_to_populate'];
         }
@@ -29,6 +33,15 @@ class FeedInputDataTransformer extends BaseApiService implements DataTransformer
             $feed->setTitle($object->url);
         } elseif ($object->title !== null) {
             $feed->setTitle($object->title);
+        }
+
+        $alienFolders = $this->em->createQuery("
+            SELECT f.id
+            FROM App\Entity\Folder f
+            WHERE f.id IN (:folderIds) AND f.owner != :owner
+        ")->setParameters(['folderIds' => $object->folders, 'owner' => $this->userId])->getArrayResult();
+        if ($alienFolders) {
+            throw new \Exception('Some folders belong to other user');
         }
 
         $idIndex = [];

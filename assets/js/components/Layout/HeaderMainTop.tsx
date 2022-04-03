@@ -8,7 +8,7 @@ const LayoutHeaderMainTop: React.FC = () => {
         <div className="subsection">
             <AuthStatus />
 
-            <Navigation/>
+            {/*<Navigation/>*/}
 
             <GlobalFetchingIndicator/>
         </div>

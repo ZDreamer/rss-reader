@@ -19,9 +19,18 @@ function useFeedTree() {
                     FeedTree.setTree(tree);
                     tree.isProcessedAfterLoad = true;
 
+                    if (pageParams.feedId && !FeedTree.getFeed(pageParams.feedId)) {
+                        navigate('/');
+                        return;
+                    }
+
+                    if (pageParams.folderId && !FeedTree.getFolder(pageParams.folderId)) {
+                        navigate('/');
+                        return;
+                    }
+
                     if (pageParams.feedId && pageParams.folderId) {
                         const feed = FeedTree.getFeed(pageParams.feedId);
-
                         if (!feed.folders.includes(parseInt(pageParams.folderId))) {
                             navigate(`/folder/${feed.folders[0]}/feed/${pageParams.feedId}`);
                         }
