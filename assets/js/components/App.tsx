@@ -2,14 +2,10 @@ import React, {FC} from 'react';
 import {Route, Routes} from "react-router-dom";
 import NotFound from "../pages/NotFound";
 import LayoutMain from "./Layout/Main";
-import AuthProvider from "./Auth/AuthProvider";
-import AuthRequired from "./Auth/AuthRequired";
-import ProtectedPage from "../pages/ProtectedPage";
-import LoginPage from "../pages/LoginPage";
 import {QueryClient, QueryClientProvider} from "react-query";
 import {ReactQueryDevtools} from "react-query/devtools";
-import PageFolder from "./Page/Folder";
-import PageFeed from "./Page/Feed";
+import PageFolder from "../pages/Folder";
+import PageFeed from "../pages/Feed";
 
 const queryClient = new QueryClient({
     defaultOptions: {
@@ -23,31 +19,18 @@ const queryClient = new QueryClient({
 const App: FC = () => {
     return (
         <QueryClientProvider client={queryClient}>
-            <AuthProvider>
-                <Routes>
-                    <Route element={<LayoutMain/>}>
-                        <Route path="/" element={<PageFolder/>} />
+            <Routes>
+                <Route element={<LayoutMain/>}>
+                    <Route path="/" element={<PageFolder/>} />
 
-                        {/*TODO: Сделать красивые ссылки*/}
-                        <Route path="folder/:folderId" element={<PageFolder/>} />
+                    {/*TODO: Сделать красивые ссылки*/}
+                    <Route path="folder/:folderId" element={<PageFolder/>} />
 
-                        <Route path="folder/:folderId/feed/:feedId" element={<PageFeed/>} />
+                    <Route path="folder/:folderId/feed/:feedId" element={<PageFeed/>} />
 
-                        <Route path="login" element={<LoginPage />} />
-
-                        <Route
-                            path="protected"
-                            element={
-                                <AuthRequired>
-                                    <ProtectedPage />
-                                </AuthRequired>
-                            }
-                        />
-
-                        <Route path="*" element={<NotFound/>} />
-                    </Route>
-                </Routes>
-            </AuthProvider>
+                    <Route path="*" element={<NotFound/>} />
+                </Route>
+            </Routes>
             <ReactQueryDevtools initialIsOpen={false} />
         </QueryClientProvider>
     );

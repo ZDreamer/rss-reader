@@ -69,6 +69,10 @@ class Feed
     #[ORM\OneToMany(mappedBy: 'feed', targetEntity: FeedFolder::class, cascade: ["persist", "remove"])]
     private $feedFolders;
 
+    #[ORM\ManyToOne(targetEntity: FeedSource::class, inversedBy: 'feeds')]
+    #[ORM\JoinColumn(nullable: false)]
+    private $source;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -119,6 +123,18 @@ class Feed
             $this->feedFolders[] = $feedFolder;
             $feedFolder->setFeed($this);
         }
+        return $this;
+    }
+
+    public function getSource(): ?FeedSource
+    {
+        return $this->source;
+    }
+
+    public function setSource(?FeedSource $source): self
+    {
+        $this->source = $source;
+
         return $this;
     }
 }

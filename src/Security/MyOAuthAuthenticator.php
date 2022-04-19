@@ -38,7 +38,7 @@ class MyOAuthAuthenticator extends OAuth2Authenticator
     public function authenticate(Request $request): Passport
     {
         /** @var \KnpU\OAuth2ClientBundle\Client\Provider\YandexClient $client */
-        $client = $this->clientRegistry->getClient('yandex_main');
+        $client = $this->clientRegistry->getClient('yandex_main'); //TODO: Добавить ещё способов авторизации
         $accessToken = $this->fetchAccessToken($client);
 
         return new SelfValidatingPassport(

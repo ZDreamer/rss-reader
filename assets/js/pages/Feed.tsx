@@ -1,7 +1,7 @@
 import React from 'react';
-import useFeedTree from "../../hooks/useFeedTree";
-import useParamsFolderId from "../../hooks/useParamsFolderId";
-import useParamsFeedId from "../../hooks/useParamsFeedId";
+import useFeedTree from "../hooks/useFeedTree";
+import useParamsFolderId from "../hooks/useParamsFolderId";
+import useParamsFeedId from "../hooks/useParamsFeedId";
 
 const PageFeed: React.FC = () => {
     const {data: tree} = useFeedTree();

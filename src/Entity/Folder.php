@@ -85,7 +85,6 @@ class Folder
 
     public function setParent(?Folder $parent): self
     {
-        //TODO: Проверить что родитель принадлежит тому-же User
         $this->parent = $parent;
 
         return $this;
