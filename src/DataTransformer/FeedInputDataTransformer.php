@@ -30,7 +30,9 @@ class FeedInputDataTransformer extends BaseApiService implements DataTransformer
         }
 
         if ($isNew) {
-            $feed->setTitle($object->url);
+            $feedSourceData = $this->getOrCreateFeedSource($object);
+
+            $feed->setTitle($feedSourceData['title']);
         } elseif ($object->title !== null) {
             $feed->setTitle($object->title);
         }
@@ -67,8 +69,6 @@ class FeedInputDataTransformer extends BaseApiService implements DataTransformer
             $toRemove = array_diff($newFolderIds, $object->folders);
         }
 
-        //dump(['toAdd' => $toAdd, 'toRemove' => $toRemove, '$idIndex' => $idIndex]);
-
         //TODO: Надо разобраться как в persister такие вещи делать
         foreach ($toAdd as $folderId) {
             $feedFolder = new FeedFolder();
@@ -84,6 +84,14 @@ class FeedInputDataTransformer extends BaseApiService implements DataTransformer
         }
 
         return $feed;
+    }
+
+    private function getOrCreateFeedSource($object) {
+        $urlProcessor = new \App\Service\UrlProcessor;
+
+        return [
+            'title' => $urlProcessor->toUrlTitle($object->url),
+        ];
     }
 
     public function supportsTransformation($data, string $to, array $context = []): bool
