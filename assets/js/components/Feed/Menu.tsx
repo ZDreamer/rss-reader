@@ -20,6 +20,7 @@ const FeedMenu: FeedMenuType = ({ feedId }) => {
         }
     });
 
+    //TODO: Переспрашивать о удалении потока
     const menu = (
         <Menu onClick={(o) => {
             if (o.key == 'edit') {

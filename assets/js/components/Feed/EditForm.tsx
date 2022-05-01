@@ -6,6 +6,7 @@ import MutationErrors from "../MutationErrors";
 import FolderTreeSelect from "../Folder/TreeSelect";
 import useMutateFeed from "../../hooks/useMutateFeed";
 import {IFeedNew, IFeedPatch} from "../../api/ApiFeed";
+import {useParams} from "react-router-dom";
 
 export type FeedEditFormType = React.FC<{
     tree: IFeedTree,
@@ -21,6 +22,7 @@ const FeedEditForm: FeedEditFormType = ({
     setIsModalVisible
 }) => {
     const [form] = Form.useForm();
+    const pageParams = useParams();
     const mutation = useMutateFeed({
         onSuccess: () => {
             setIsModalVisible(false);
@@ -46,6 +48,10 @@ const FeedEditForm: FeedEditFormType = ({
     if (tree) {
         const feed = FeedTree.getFeed(feedId);
 
+        if (!feed.id && pageParams.folderId) {
+            feed.folders = [parseInt(pageParams.folderId)];
+        }
+
         modalBody = (
             <Form
                 form={form}
@@ -63,7 +69,7 @@ const FeedEditForm: FeedEditFormType = ({
                     <Form.Item name="id" style={{display: 'none'}}>
                         <Input />
                     </Form.Item>
-                ) : ''}
+                ) : '' }
 
                 { feed.id ? (
                     <Form.Item
@@ -78,20 +84,22 @@ const FeedEditForm: FeedEditFormType = ({
                     >
                         <Input />
                     </Form.Item>
-                ) : ''}
+                ) : '' }
 
-                <Form.Item
-                    label="Url"
-                    name="url"
-                    rules={[
-                        {
-                            required: true,
-                            message: 'Please input feed url',
-                        },
-                    ]}
-                >
-                    <Input />
-                </Form.Item>
+                { !feed.id ? (
+                    <Form.Item
+                        label="Url"
+                        name="url"
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Please input feed url',
+                            },
+                        ]}
+                    >
+                        <Input />
+                    </Form.Item>
+                ) : '' }
 
                 <Form.Item
                     label="Folders"

@@ -78,7 +78,7 @@ class FeedTreeClass  {
                 id: 0,
                 title: '',
                 url: '',
-                folders: [this.getRootFolder().id] //TODO: Если открыта страница папки то ставить её сюда
+                folders: [this.getRootFolder().id]
             };
         }
     }

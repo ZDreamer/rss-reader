@@ -21,7 +21,11 @@ class UrlProcessor
         }
 
         if (!empty($parts['host']) && $mode == 'full') {
-            $url .= '//' . $parts['host'];
+            $url .= '//';
+        }
+
+        if (!empty($parts['host'])) {
+            $url .= $parts['host'];
         }
 
         if (!empty($parts['path'])) {

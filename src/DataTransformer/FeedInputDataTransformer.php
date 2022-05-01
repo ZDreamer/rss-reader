@@ -7,11 +7,28 @@ use App\BaseApiService;
 use App\Dto\FeedInput;
 use App\Entity\Feed;
 use App\Entity\FeedFolder;
+use App\Entity\FeedSource;
 use App\Entity\Folder;
 use App\Entity\User;
+use App\Message\FeedSourceInit;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Messenger\MessageBusInterface;
+use Symfony\Component\Security\Core\Security;
 
 class FeedInputDataTransformer extends BaseApiService implements DataTransformerInterface
 {
+    protected MessageBusInterface $bus;
+
+    public function __construct(
+        EntityManagerInterface $entityManager,
+        Security $security,
+        MessageBusInterface $bus
+    ) {
+        parent::__construct($entityManager, $security);
+
+        $this->bus = $bus;
+    }
+
     public function transform($object, string $to, array $context = []): Feed
     {
         if ($context['operation_type'] === 'collection' && $context['collection_operation_name'] === 'post') {
@@ -26,13 +43,10 @@ class FeedInputDataTransformer extends BaseApiService implements DataTransformer
         $isNew = !$feed->getId();
 
         if ($isNew) {
-            $feed->setUrl($object->url);
-        }
-
-        if ($isNew) {
             $feedSourceData = $this->getOrCreateFeedSource($object);
 
             $feed->setTitle($feedSourceData['title']);
+            $feed->setSource($feedSourceData['object']);
         } elseif ($object->title !== null) {
             $feed->setTitle($object->title);
         }
@@ -89,8 +103,23 @@ class FeedInputDataTransformer extends BaseApiService implements DataTransformer
     private function getOrCreateFeedSource($object) {
         $urlProcessor = new \App\Service\UrlProcessor;
 
+        $fullUrl = $urlProcessor->toFullUrl($object->url);
+
+        $feedSource = $this->em->getRepository(FeedSource::class)->findOneBy([
+           'url' =>  $fullUrl,
+        ]);
+
+        if (!$feedSource) {
+            $feedSource = new FeedSource();
+            $feedSource->setUrl($fullUrl);
+            $feedSource->setState(FeedSource::STATE_NEW);
+
+            $this->bus->dispatch(new FeedSourceInit($fullUrl));
+        }
+
         return [
             'title' => $urlProcessor->toUrlTitle($object->url),
+            'object' => $feedSource,
         ];
     }
 

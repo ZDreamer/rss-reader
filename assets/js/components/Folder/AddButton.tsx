@@ -19,7 +19,7 @@ const FolderAddButton: React.FC = () => {
                     setIsClicked(true);
                     setIsEditFormVisible(true);
                 }}
-            ><FolderAddOutlined /> Add folder</Button>
+            ><FolderAddOutlined />Add folder</Button>
 
             {tree ? (
                 <EditForm

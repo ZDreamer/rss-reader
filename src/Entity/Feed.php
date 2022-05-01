@@ -33,7 +33,6 @@ use Symfony\Component\Validator\Constraints as Assert;
         "security" => "is_granted('ROLE_USER')"
     ],
 )]
-//cascade: ["persist", "remove"]
 class Feed
 {
     public function __construct()
@@ -50,10 +49,6 @@ class Feed
     #[Assert\NotBlank]
     private ?string $title;
 
-    #[ORM\Column(type: 'text')]
-    #[Assert\NotBlank]
-    private ?string $url;
-
     #[ORM\Column(type: 'datetime')]
     private ?DateTimeInterface $createdAt;
 
@@ -67,7 +62,11 @@ class Feed
     #[ORM\OneToMany(mappedBy: 'feed', targetEntity: FeedFolder::class, cascade: ["persist", "remove"])]
     private $feedFolders;
 
-    #[ORM\ManyToOne(targetEntity: FeedSource::class, inversedBy: 'feeds')]
+    #[ORM\ManyToOne(
+        targetEntity: FeedSource::class,
+        cascade: ["persist", "remove"],
+        inversedBy: 'feeds'
+    )]
     #[ORM\JoinColumn(nullable: false)]
     private $source;
 
@@ -108,13 +107,6 @@ class Feed
         return $this;
     }
 
-    public function setUrl(string $url): self
-    {
-        $this->url = $url;
-
-        return $this;
-    }
-
     public function addFeedFolder(FeedFolder $feedFolder): self
     {
         if (!$this->feedFolders->contains($feedFolder)) {
@@ -132,6 +124,18 @@ class Feed
     public function setSource(?FeedSource $source): self
     {
         $this->source = $source;
+
+        return $this;
+    }
+
+    public function getState(): ?string
+    {
+        return $this->state;
+    }
+
+    public function setState(string $state): self
+    {
+        $this->state = $state;
 
         return $this;
     }

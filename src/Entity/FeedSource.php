@@ -1,5 +1,5 @@
 <?php
-
+//TODO: Удалять FeedSource, если удалены все его Feed
 namespace App\Entity;
 
 use App\Repository\FeedSourceRepository;
@@ -8,8 +8,12 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: FeedSourceRepository::class)]
+#[ORM\HasLifecycleCallbacks]
+#[UniqueEntity('url')]
 class FeedSource
 {
+    const STATE_NEW = 'new';
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
@@ -18,11 +22,11 @@ class FeedSource
     #[ORM\Column(type: 'text')]
     private $url;
 
-    #[ORM\Column(type: 'datetime_immutable')]
-    private $created_at;
+    #[ORM\Column(type: 'datetime')]
+    private $createdAt;
 
-    #[ORM\Column(type: 'datetime_immutable')]
-    private $updated_at;
+    #[ORM\Column(type: 'datetime')]
+    private $updatedAt;
 
     #[ORM\Column(type: 'string', length: 32)]
     private $state;
@@ -33,6 +37,19 @@ class FeedSource
     public function __construct()
     {
         $this->feeds = new ArrayCollection();
+    }
+
+    #[ORM\PrePersist]
+    public function setCreatedAtValue()
+    {
+        $this->createdAt = new \DateTime();
+        $this->updatedAt = new \DateTime();
+    }
+
+    #[ORM\PreUpdate]
+    public function setUpdatedAtValue()
+    {
+        $this->updatedAt = new \DateTime();
     }
 
     public function getId(): ?int
@@ -54,24 +71,24 @@ class FeedSource
 
     public function getCreatedAt(): ?\DateTimeImmutable
     {
-        return $this->created_at;
+        return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $created_at): self
+    public function setCreatedAt(\DateTimeImmutable $createdAt): self
     {
-        $this->created_at = $created_at;
+        $this->createdAt = $createdAt;
 
         return $this;
     }
 
     public function getUpdatedAt(): ?\DateTimeImmutable
     {
-        return $this->updated_at;
+        return $this->updatedAt;
     }
 
-    public function setUpdatedAt(\DateTimeImmutable $updated_at): self
+    public function setUpdatedAt(\DateTimeImmutable $updatedAt): self
     {
-        $this->updated_at = $updated_at;
+        $this->updatedAt = $updatedAt;
 
         return $this;
     }

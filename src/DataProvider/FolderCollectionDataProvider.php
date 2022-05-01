@@ -27,8 +27,7 @@ final class FolderCollectionDataProvider extends BaseApiService implements Conte
         $feeds = $this->em->createQuery("
             SELECT
                 s.id,
-                s.title,
-                s.url
+                s.title
             FROM App\Entity\Feed s
             WHERE s.owner = :user_id
             ORDER BY s.id ASC

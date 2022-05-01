@@ -56,6 +56,20 @@ services:
     networks:
       - rss-reader
 
+  rabbitmq:
+    build:
+      context: ./
+      dockerfile: docker-compose/rabbitmq/Dockerfile
+    image: rss-rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    container_name: rss-rabbitmq
+    restart: unless-stopped
+    networks:
+      - rss-reader
+
+
   jetbrains:
     build:
       args:
@@ -72,6 +86,8 @@ services:
     environment:
       - TZ=Europe/Moscow
     restart: unless-stopped
+    depends_on:
+      - rabbitmq
     working_dir: /var/www/
     volumes:
       - ./:/var/www
