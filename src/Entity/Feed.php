@@ -64,7 +64,7 @@ class Feed
 
     #[ORM\ManyToOne(
         targetEntity: FeedSource::class,
-        cascade: ["persist", "remove"],
+        cascade: ["persist"],
         inversedBy: 'feeds'
     )]
     #[ORM\JoinColumn(nullable: false)]

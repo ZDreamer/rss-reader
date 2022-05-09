@@ -109,7 +109,11 @@ class FeedInputDataTransformer extends BaseApiService implements DataTransformer
            'url' =>  $fullUrl,
         ]);
 
-        if (!$feedSource) {
+        if ($feedSource) {
+            if ($feedSource->getState() == FeedSource::STATE_INACTIVE) {
+                $feedSource->setState(FeedSource::STATE_ACTIVE);
+            }
+        } else {
             $feedSource = new FeedSource();
             $feedSource->setUrl($fullUrl);
             $feedSource->setState(FeedSource::STATE_NEW);

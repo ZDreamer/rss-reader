@@ -4,25 +4,21 @@ namespace App\Service;
 class UrlProcessor
 {
     public function toFullUrl($url): string {
-        return $this->parseUrl($url, 'full');
+        if (!parse_url($url, PHP_URL_SCHEME)) {
+            $url = 'https://' . $url;
+        }
+
+        if (filter_var($url, FILTER_VALIDATE_URL) === false) {
+            throw new \Exception('Invalid url');
+        }
+
+        return $url;
     }
 
     public function toUrlTitle($url): string {
-        return $this->parseUrl($url, 'title');
-    }
-
-    private function parseUrl($url, $mode): string {
         $parts = parse_url($url);
 
         $url = '';
-
-        if (!empty($parts['scheme']) && $mode == 'full') {
-            $url .= $parts['scheme'] . ':';
-        }
-
-        if (!empty($parts['host']) && $mode == 'full') {
-            $url .= '//';
-        }
 
         if (!empty($parts['host'])) {
             $url .= $parts['host'];

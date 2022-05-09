@@ -69,7 +69,6 @@ services:
     networks:
       - rss-reader
 
-
   jetbrains:
     build:
       args:

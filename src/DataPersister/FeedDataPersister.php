@@ -4,9 +4,17 @@ namespace App\DataPersister;
 use ApiPlatform\Core\DataPersister\ContextAwareDataPersisterInterface;
 use App\BaseApiService;
 use App\Entity\Feed;
+use App\EntityService\Feed\FeedService;
 
 final class FeedDataPersister extends BaseApiService implements ContextAwareDataPersisterInterface
 {
+    protected FeedService $feedService;
+
+    public function __construct(FeedService $feedService)
+    {
+        $this->feedService = $feedService;
+    }
+
     public function supports($data, array $context = []): bool
     {
         return $data instanceof Feed;
@@ -29,7 +37,6 @@ final class FeedDataPersister extends BaseApiService implements ContextAwareData
 
     public function remove($data, array $context = [])
     {
-        $this->em->remove($data);
-        $this->em->flush();
+        $this->feedService->remove($data);
     }
 }

@@ -13,6 +13,8 @@ use Doctrine\ORM\Mapping as ORM;
 class FeedSource
 {
     const STATE_NEW = 'new';
+    const STATE_ACTIVE = 'active';
+    const STATE_INACTIVE = 'inactive';
 
     #[ORM\Id]
     #[ORM\GeneratedValue]

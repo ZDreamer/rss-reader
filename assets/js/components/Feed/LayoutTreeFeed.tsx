@@ -23,6 +23,7 @@ const FeedLayoutTreeFeed: FeedLayoutTreeFeedType = ({
 }) => {
     const feedDepth = FeedTree.getFolderDepth(folder) + 1;
 
+    //TODO: Не меняется заголовок фида в дереве если его отредактировать
     return (
         <li
             className={classNames('ant-menu-item ant-menu-item-only-child', {
