@@ -14,5 +14,5 @@ framework:
                     max_retries: 3
                     multiplier: 2
 
-        routing:
-            'App\Message\AbstractAsyncMessage': async
+#        routing:
+#            'App\Message\AbstractAsyncMessage': async

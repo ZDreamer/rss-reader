@@ -20,3 +20,7 @@ services:
             - '../src/Entity/'
             - '../src/Kernel.php'
             - '../src/Tests/'
+
+    monolog.my_line_formatter:
+        class: Monolog\Formatter\LineFormatter
+        arguments: [ ~, 'd.m.y H:i:s', true ]

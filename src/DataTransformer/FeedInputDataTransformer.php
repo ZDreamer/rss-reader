@@ -19,13 +19,7 @@ class FeedInputDataTransformer extends BaseApiService implements DataTransformer
 {
     protected MessageBusInterface $bus;
 
-    public function __construct(
-        EntityManagerInterface $entityManager,
-        Security $security,
-        MessageBusInterface $bus
-    ) {
-        parent::__construct($entityManager, $security);
-
+    public function __construct(MessageBusInterface $bus) {
         $this->bus = $bus;
     }
 
@@ -111,13 +105,15 @@ class FeedInputDataTransformer extends BaseApiService implements DataTransformer
 
         if ($feedSource) {
             if ($feedSource->getState() == FeedSource::STATE_INACTIVE) {
-                $feedSource->setState(FeedSource::STATE_ACTIVE);
+                $feedSource->setState(FeedSource::STATE_NEW);
             }
         } else {
             $feedSource = new FeedSource();
             $feedSource->setUrl($fullUrl);
             $feedSource->setState(FeedSource::STATE_NEW);
+        }
 
+        if ($feedSource->getState() == FeedSource::STATE_NEW) {
             $this->bus->dispatch(new FeedSourceInit($fullUrl));
         }
 

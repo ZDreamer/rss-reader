@@ -5,7 +5,6 @@ namespace App;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Contracts\Service\Attribute\Required;
-use Symfony\Contracts\Service\ServiceSubscriberInterface;
 
 class BaseApiService
 {
