@@ -4,7 +4,7 @@ import FeedTree from "../utils/FeedTree";
 import ApiFeed, {IFeedNew, IFeedPatch} from "../api/ApiFeed";
 
 type IMutateFeedProps = {
-    onSuccess?: () => void
+    onSuccess?: (data: IMutateFeedMutateProps) => void
 }
 
 type IMutateFeedMutateProps = {
@@ -14,8 +14,17 @@ type IMutateFeedMutateProps = {
     action: 'update',
     feed: IFeedPatch
 } | {
+    action: 'reload',
+    id: number
+} | {
     action: 'remove',
     id: number
+}
+
+type IMutateFeedMutateContext = {
+    invalidate: boolean,
+    mutateData: IMutateFeedMutateProps,
+    previousTree: IFeedTree | undefined
 }
 
 function useMutateFeed(o?: IMutateFeedProps) {
@@ -26,11 +35,19 @@ function useMutateFeed(o?: IMutateFeedProps) {
             return ApiFeed.create(data.feed);
         } else if (data.action == 'update') {
             return ApiFeed.modify(data.feed);
+        } else if (data.action == 'reload') {
+            return ApiFeed.reload(data.id);
         } else { //remove
             return ApiFeed.remove(data.id);
         }
     }, {
         onMutate: async (data: IMutateFeedMutateProps) => {
+            const context: IMutateFeedMutateContext = {
+                invalidate: true,
+                mutateData: data,
+                previousTree: undefined
+            };
+
             if (data.action == 'update') {
                 // Cancel any outgoing refetches (so they don't overwrite our optimistic update)
                 await queryClient.cancelQueries(['feedTree']);
@@ -44,9 +61,7 @@ function useMutateFeed(o?: IMutateFeedProps) {
                     needFullReload = true;
                 }
 
-                if (needFullReload) {
-                    return { invalidate: true }
-                } else {
+                if (!needFullReload) {
                     const previousTree = queryClient.getQueryData<IFeedTree>(['feedTree']);
 
                     if (previousTree) {
@@ -56,11 +71,14 @@ function useMutateFeed(o?: IMutateFeedProps) {
                         );
                     }
 
-                    return { invalidate: false, previousTree }
+                    context.invalidate = false;
+                    context.previousTree = previousTree;
                 }
-            } else {
-                return { invalidate: true }
+            } else if (data.action == 'reload') {
+                //context.invalidate = false;
             }
+
+            return context;
         },
 
         onSuccess: (data, variables, context) => {
@@ -68,7 +86,7 @@ function useMutateFeed(o?: IMutateFeedProps) {
                 queryClient.invalidateQueries(['feedTree']);
             }
 
-            o && o.onSuccess && o.onSuccess();
+            o && o.onSuccess && o.onSuccess(context.mutateData);
         },
 
         onError: (err, newTodo, context) => {
@@ -83,7 +101,7 @@ function useMutateFeed(o?: IMutateFeedProps) {
 
         onSettled: () => {
             // Always refetch after error or success:
-            queryClient.invalidateQueries('todos')
+            queryClient.invalidateQueries(['feedTree'])
         },
     });
 }

@@ -4,12 +4,30 @@ monolog:
             type: stream
             path: "%kernel.logs_dir%/%kernel.environment%.log"
             level: debug
-            channels: ["!event"]
+            channels: ["!event", "!doctrine"]
+            formatter: monolog.my_line_formatter
+        errors:
+            type: stream
+            path: "%kernel.logs_dir%/%kernel.environment%-errors.log"
+            level: error
+            formatter: monolog.my_line_formatter
         messenger:
             type: stream
             path: "%kernel.logs_dir%/%kernel.environment%-messenger.log"
             level: debug
             channels: [ "messenger" ]
+            formatter: monolog.my_line_formatter
+        doctrine:
+            type: stream
+            path: "%kernel.logs_dir%/%kernel.environment%-doctrine.log"
+            level: debug
+            channels: [ "doctrine" ]
+            formatter: monolog.my_line_formatter
+        event:
+            type: stream
+            path: "%kernel.logs_dir%/%kernel.environment%-event.log"
+            level: debug
+            channels: [ "event" ]
             formatter: monolog.my_line_formatter
 
         # uncomment to get logging in your browser

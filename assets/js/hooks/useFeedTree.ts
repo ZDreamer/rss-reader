@@ -19,6 +19,7 @@ function useFeedTree() {
                     FeedTree.setTree(tree);
                     tree.isProcessedAfterLoad = true;
 
+                    //TODO: Подумать как перенести это всё в обработчик onSuccess useMutateFeed
                     if (pageParams.feedId && !FeedTree.getFeed(pageParams.feedId)) {
                         navigate('/');
                         return;

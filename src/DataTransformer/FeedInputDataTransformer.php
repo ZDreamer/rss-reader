@@ -11,18 +11,10 @@ use App\Entity\FeedSource;
 use App\Entity\Folder;
 use App\Entity\User;
 use App\Message\FeedSourceInit;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
-use Symfony\Component\Security\Core\Security;
 
 class FeedInputDataTransformer extends BaseApiService implements DataTransformerInterface
 {
-    protected MessageBusInterface $bus;
-
-    public function __construct(MessageBusInterface $bus) {
-        $this->bus = $bus;
-    }
-
     public function transform($object, string $to, array $context = []): Feed
     {
         if ($context['operation_type'] === 'collection' && $context['collection_operation_name'] === 'post') {

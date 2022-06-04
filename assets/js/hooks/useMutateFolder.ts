@@ -70,7 +70,7 @@ function useMutateFolder(o?: IMutateFolderProps) {
 
         onSettled: () => {
             // Always refetch after error or success:
-            queryClient.invalidateQueries('todos')
+            queryClient.invalidateQueries(['feedTree'])
         },
     });
 }

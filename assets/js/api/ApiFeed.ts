@@ -34,6 +34,10 @@ export default class ApiFeed {
         return await Api.patch(`/feeds/${feed.id}`, feed);
     }
 
+    static async reload(id: number) {
+        return await Api.get(`/feed/${id}/reload`);
+    }
+
     static async remove(id: number) {
         return await Api.remove(`/feeds/${id}`);
     }

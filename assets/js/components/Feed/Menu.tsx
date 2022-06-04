@@ -3,7 +3,7 @@ import useFeedTree from "../../hooks/useFeedTree";
 import {useNavigate} from "react-router-dom";
 import useMutateFeed from "../../hooks/useMutateFeed";
 import {Button, Dropdown, Menu} from "antd";
-import {CloseSquareOutlined, DownOutlined, EditOutlined, FolderOutlined} from "@ant-design/icons";
+import {CloseSquareOutlined, DownOutlined, EditOutlined, RetweetOutlined, FolderOutlined} from "@ant-design/icons";
 import EditForm from "../Feed/EditForm";
 
 export type FeedMenuType = React.FC<{
@@ -15,8 +15,10 @@ const FeedMenu: FeedMenuType = ({ feedId }) => {
     const {data: tree} = useFeedTree();
     const navigate = useNavigate();
     const feedMutation = useMutateFeed({
-        onSuccess: () => {
-            navigate("/");
+        onSuccess: (mutateData) => {
+            if (mutateData.action == 'remove') {
+                navigate("/");
+            }
         }
     });
 
@@ -25,12 +27,17 @@ const FeedMenu: FeedMenuType = ({ feedId }) => {
         <Menu onClick={(o) => {
             if (o.key == 'edit') {
                 setIsEditFormVisible(true)
+            } else if (o.key == 'reload') {
+                feedMutation.mutate({ action: 'reload', id: feedId })
             } else if (o.key == 'remove') {
                 feedMutation.mutate({ action: 'remove', id: feedId })
             }
         }}>
             <Menu.Item key="edit" icon={<EditOutlined />}>
                 Edit
+            </Menu.Item>
+            <Menu.Item key="reload" icon={<RetweetOutlined />}>
+                Reload
             </Menu.Item>
             <Menu.Item key="remove" icon={<CloseSquareOutlined />}>
                 Remove

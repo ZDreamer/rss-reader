@@ -16,6 +16,8 @@ class FeedSource
     const STATE_ACTIVE = 'active';
     const STATE_INACTIVE = 'inactive';
 
+    const TYPE_RSS = 'rss';
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
@@ -35,6 +37,12 @@ class FeedSource
 
     #[ORM\OneToMany(mappedBy: 'source', targetEntity: Feed::class)]
     private $feeds;
+
+    #[ORM\Column(type: 'json', nullable: true)]
+    private $meta = [];
+
+    #[ORM\Column(type: 'string', length: 32, nullable: true)]
+    private $type;
 
     public function __construct()
     {
@@ -133,6 +141,30 @@ class FeedSource
                 $feed->setSource(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getMeta(): ?array
+    {
+        return $this->meta;
+    }
+
+    public function setMeta(?array $meta): self
+    {
+        $this->meta = $meta;
+
+        return $this;
+    }
+
+    public function getType(): ?string
+    {
+        return $this->type;
+    }
+
+    public function setType(?string $type): self
+    {
+        $this->type = $type;
 
         return $this;
     }

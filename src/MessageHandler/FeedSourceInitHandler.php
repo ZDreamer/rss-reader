@@ -42,12 +42,25 @@ class FeedSourceInitHandler extends AbstractAsyncMessageHandler
 
         $content = $response->getContent();
 
-        if ($rssLink = $this->findRssLinkInPage($content, $pageUrl)) {
-            $this->log('Page type: RSS');
-            $this->log('RSS feed: ' . $rssLink);
+        if ($rssFeedUrl = $this->findRssLinkInPage($content, $pageUrl)) {
+
+
+            $this->_processRssSource($feedSource, [
+                'feedUrl' => $rssFeedUrl,
+            ]);
         } else {
             $this->log('Page type: unknown');
         }
+    }
+
+    private function _processRssSource($feedSource, $o) {
+        $this->log('Page type: RSS');
+        $this->log('RSS feed: ' . $o['feedUrl']);
+
+        //TODO: Посылать адрес сайта и email в UserAgent
+        $feed = $this->httpClient->request('GET', $o['feedUrl']);
+
+        $this->log("Feed content:\n" . $feed->getContent());
     }
 
     /*

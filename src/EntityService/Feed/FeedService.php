@@ -5,6 +5,7 @@ namespace App\EntityService\Feed;
 use App\BaseApiService;
 use App\Entity\Feed;
 use App\Entity\FeedSource;
+use App\Message\FeedSourceInit;
 
 class FeedService extends BaseApiService
 {
@@ -28,5 +29,11 @@ class FeedService extends BaseApiService
 
             $this->em->flush();
         }
+    }
+
+    public function reload(Feed $feed) {
+        $fullUrl = $feed->getSource()->getUrl();
+
+        $this->bus->dispatch(new FeedSourceInit($fullUrl));
     }
 }
