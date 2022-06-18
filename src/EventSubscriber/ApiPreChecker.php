@@ -3,8 +3,6 @@ namespace App\EventSubscriber;
 
 use ApiPlatform\Core\Action\PlaceholderAction;
 use App\Controller\ApiAbstractController;
-use App\Controller\ApiFeedController;
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;

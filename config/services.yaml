@@ -24,3 +24,5 @@ services:
     monolog.my_line_formatter:
         class: Monolog\Formatter\LineFormatter
         arguments: [ ~, 'd.m.y H:i:s', true ]
+        calls:
+            - [ includeStacktraces ]
